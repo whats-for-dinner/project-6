@@ -1,7 +1,6 @@
 import React,{Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import axios from 'axios';
-import './App.css';
 
 class RecipeGrid extends Component {
   
@@ -11,6 +10,9 @@ class RecipeGrid extends Component {
         
             <div className="">
                 <h1>This is the recipe grid page</h1>
+                <Link to="/">Home</Link>
+                <Link to="/event/:">Event Page</Link>
+                <Link to="/fullrecipe/:">Full Recipe</Link>
             </div>
         
         );
