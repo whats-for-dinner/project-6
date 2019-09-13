@@ -44,6 +44,15 @@ class App extends Component {
 
   };
 
+  getPage = (eventIndex) => {
+    // console.log(eventIndex)
+    this.setState({
+      currentEvent: eventIndex
+    
+    })
+
+  };
+
   // this function runs on Submit
   createEvent = (event) => {
       event.preventDefault();
@@ -72,10 +81,10 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Route exact path="/" render={() =>{return <LandingPage event={this.state.events} getEventName={this.getEventName} createEvent={this.createEvent}/>}}/>
+          <Route exact path="/" render={() =>{return <LandingPage event={this.state.events} getEventName={this.getEventName} createEvent={this.createEvent} getPage={this.getPage}/>}}/>
           {/* <Route path="/contact" render={() =>{return <Contact name="colin" />}}/> */}
           {/* the colon below tells router to expect a parameter. This value is going to be passed in later. */}
-          <Route path="/dashboard/:partyName" render={() =>{return <Dashboard event={this.state.events}/>}}/>
+          <Route path="/dashboard/" render={() => { return <Dashboard event={this.state.events} currentEvent={this.state.currentEvent}/>}}/>
           <Route path="/recipegrid/:" component={RecipeGrid} />
           <Route path="/fullrecipe/:" component={FullRecipe} />
         </div>
