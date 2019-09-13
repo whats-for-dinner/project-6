@@ -36,12 +36,11 @@ const LandingPage = (props) => {
             <section className="events">
                 {/* map through this.state.events and return events to page as <li> elements in <Link>s. */}
                 {/* {props["event"] ?console.log(props["event"][0]):console.log('null')} */}
-
                 {props.event?
                     props.event.map((userEvents, eventIndex) => {
                         return (
                             // console.log(userEvents.eventName)
-                            <p key={eventIndex}>{userEvents.eventName}</p>
+                            <Link to={`/dashboard/${userEvents.eventName}`} onClick={props.currentEvent} value={eventIndex} key={eventIndex}>{userEvents.eventName}</Link>
                         )
                     }
                 ):null}

@@ -6,7 +6,7 @@ import firebase from '../firebase';
 class EventPage extends Component {
   
     render(){
-    
+        console.log(this.props.match.params.partyName)
         return (
         
             <div className="">

@@ -14,6 +14,7 @@ class App extends Component {
     this.state = ({
         events:[],
         createEvent: "",
+        currentEvent: "",
 
     })
 
@@ -74,7 +75,7 @@ class App extends Component {
           <Route exact path="/" render={() =>{return <LandingPage event={this.state.events} getEventName={this.getEventName} createEvent={this.createEvent}/>}}/>
           {/* <Route path="/contact" render={() =>{return <Contact name="colin" />}}/> */}
           {/* the colon below tells router to expect a parameter. This value is going to be passed in later. */}
-          <Route path="/dashboard/:" component={Dashboard} />
+          <Route path="/dashboard/:partyName" render={() =>{return <Dashboard event={this.state.events}/>}}/>
           <Route path="/recipegrid/:" component={RecipeGrid} />
           <Route path="/fullrecipe/:" component={FullRecipe} />
         </div>
