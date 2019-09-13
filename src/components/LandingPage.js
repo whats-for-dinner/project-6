@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
-import axios from 'axios';
+import firebase from '../firebase';
 
 
 
@@ -9,7 +9,9 @@ class LandingPage extends Component {
     constructor(){
         super();
         this.state = ({
-            events:[]
+            events:[],
+            createEvent: "",
+
         })
 
 
@@ -18,11 +20,50 @@ class LandingPage extends Component {
     // function to add new event to Firebase 'event' array as new object.  New object contains all state information with empty strings as key values for any still undetermined info.
 
     componentDidMount(){
+        const dbRef = firebase.database().ref(`events`)
 
-    //function that grabs events array on firebase and updates array 'events' in this.state.
-
+        dbRef.on('value', (data) => {
+            const savedEvents = data.val();
+            const firebaseArray = Object.values(savedEvents);
+            
+            this.setState({
+                events: firebaseArray,
+            })
+        });
     }
-  
+
+    // this function is for receiving the on change on the input and setting it to state
+    getEventName = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value,   
+        }) 
+
+    };
+
+    // this function runs on Submit
+    createEvent = (event) => {
+        event.preventDefault();
+        // taking the events array in state and copying it
+        const copyOfEvents = [...this.state.events];
+        // this is putting the input we saved in state into an object
+        const makeObject = {name: this.state.createEvent}
+        // we are pushing the object to the copy of the array in state
+        copyOfEvents.unshift(makeObject);
+        // updating the state of events to the new version of the array
+        this.setState({
+            events: copyOfEvents,
+        }, () => {
+            // sending new event object to firebase - asynchronous callback
+            const dbRef = firebase.database().ref(`events/${this.state.events[0].name}`);
+            dbRef.set({
+                eventName: this.state.events[0].name,
+                guests: [{ name: "", ingredients: [""] }],
+                recipes: [{ recipe1: { title: "", img: "", ingredients: [""], directions: "" } }, { recipe: { title: "", img: "", ingredients: [""], directions: "" } }, { recipe3: { title: "", img: "", ingredients: [""], directions: "" } }]
+            });
+        })
+        
+    }
+    
     render(){
     
         return (
@@ -38,9 +79,13 @@ class LandingPage extends Component {
                     </nav>
                 </header>
                 <section className="startForm">
-                    <form action="">
-                        <input className="createEvent" type="text"/>
+                    <form 
+                    // onSubmit={this.pushToFirebase} 
+                    onSubmit={this.createEvent}
+                    action="">
+                        <input onChange={this.getEventName} name="createEvent" className="createEvent" type="text"/>
                         <button>
+                            Submit
                             {/* This button creates a new event object in the events array AND links to event page. */}
                         </button>      
                     </form>
@@ -50,6 +95,16 @@ class LandingPage extends Component {
                 </section>
                 <section className="events">
                     {/* map through this.state.events and return events to page as <li> elements in <Link>s. */}
+
+                    {
+                        this.state.events.map((userEvents, eventIndex) => {
+                            return (
+                                // console.log(userEvents.eventName)
+                                <p key={eventIndex}>{userEvents.eventName}</p>
+                            )
+                        }
+                    )}
+
                 </section>
             </div>
         
