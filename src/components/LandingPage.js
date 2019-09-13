@@ -9,7 +9,7 @@ class LandingPage extends Component {
     constructor(){
         super();
         this.state = ({
-            events:[{name: "dummyEvent"}],
+            events:[],
             createEvent: "",
 
         })
@@ -21,13 +21,6 @@ class LandingPage extends Component {
 
     componentDidMount(){
 
-    //function that grabs events array on firebase and updates array 'events' in this.state.
-    // console.log(this.state.events[0].name)
-    //     const dbRef = firebase.database().ref(`events/${this.state.events[0].name}`);
-    //     dbRef.set({
-    //         guests: [{ name: "Aaron", ingredients: ["carrots", "potatoes"]} ],
-    //         recipes: [{ recipe1: { title: "", img: "", ingredients: ["carrots", "potatoes"], directions: "" } }, { recipe: { title: "", img: "", ingredients: ["carrots", "potatoes"], directions: "" } }, { recipe3: { title: "", img: "", ingredients: ["carrots", "potatoes"], directions: "" }}]
-    //     });
     }
 
     // this function is for receiving the on change on the input and setting it to state
@@ -50,22 +43,15 @@ class LandingPage extends Component {
         // updating the state of events to the new version of the array
         this.setState({
             events: copyOfEvents,
+        }, () => {
+            // sending new event object to firebase - asynchronous callback
+            const dbRef = firebase.database().ref(`events/${this.state.events[0].name}`);
+            dbRef.set({
+                guests: [{ name: "", ingredients: [""] }],
+                recipes: [{ recipe1: { title: "", img: "", ingredients: [""], directions: "" } }, { recipe: { title: "", img: "", ingredients: [""], directions: "" } }, { recipe3: { title: "", img: "", ingredients: [""], directions: "" } }]
+            });
         })
-
-    }
-
-     
-
-
-
-    pushToFirebase = (event) => {
-        event.preventDefault();
-
-        const dbRef = firebase.database().ref(`events/${this.state.events[0].name}`);
-        dbRef.set({
-            guests: [{ name: "Aaron", ingredients: ["carrots", "potatoes", "tomatoes"] }],
-            recipes: [{ recipe1: { title: "", img: "", ingredients: [], directions: "" } }, { recipe: { title: "", img: "", ingredients: [], directions: "" } }, { recipe3: { title: "", img: "", ingredients: [], directions: "" }}]
-        });
+        
     }
     
     render(){
