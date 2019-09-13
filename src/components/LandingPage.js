@@ -20,7 +20,16 @@ class LandingPage extends Component {
     // function to add new event to Firebase 'event' array as new object.  New object contains all state information with empty strings as key values for any still undetermined info.
 
     componentDidMount(){
-        
+        const dbRef = firebase.database().ref(`events`)
+
+        dbRef.on('value', (data) => {
+            const savedEvents = data.val();
+            const firebaseArray = Object.values(savedEvents);
+            
+            this.setState({
+                events: firebaseArray,
+            })
+        });
     }
 
     // this function is for receiving the on change on the input and setting it to state
@@ -47,6 +56,7 @@ class LandingPage extends Component {
             // sending new event object to firebase - asynchronous callback
             const dbRef = firebase.database().ref(`events/${this.state.events[0].name}`);
             dbRef.set({
+                eventName: this.state.events[0].name,
                 guests: [{ name: "", ingredients: [""] }],
                 recipes: [{ recipe1: { title: "", img: "", ingredients: [""], directions: "" } }, { recipe: { title: "", img: "", ingredients: [""], directions: "" } }, { recipe3: { title: "", img: "", ingredients: [""], directions: "" } }]
             });
@@ -85,6 +95,16 @@ class LandingPage extends Component {
                 </section>
                 <section className="events">
                     {/* map through this.state.events and return events to page as <li> elements in <Link>s. */}
+
+                    {
+                        this.state.events.map((userEvents, eventIndex) => {
+                            return (
+                                // console.log(userEvents.eventName)
+                                <p key={eventIndex}>{userEvents.eventName}</p>
+                            )
+                        }
+                    )}
+
                 </section>
             </div>
         
