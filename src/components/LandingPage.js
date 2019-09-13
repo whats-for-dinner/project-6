@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
-import axios from 'axios';
+import firebase from '../firebase';
 
 
 
@@ -9,7 +9,7 @@ class LandingPage extends Component {
     constructor(){
         super();
         this.state = ({
-            events:[]
+            events:[{name: "event1"}, {name:"event2"}]
         })
 
 
@@ -20,9 +20,32 @@ class LandingPage extends Component {
     componentDidMount(){
 
     //function that grabs events array on firebase and updates array 'events' in this.state.
-
+    // console.log(this.state.events[0].name)
+    //     const dbRef = firebase.database().ref(`events/${this.state.events[0].name}`);
+    //     dbRef.set({
+    //         guests: [{ name: "Aaron", ingredients: ["carrots", "potatoes"]} ],
+    //         recipes: [{ recipe1: { title: "", img: "", ingredients: ["carrots", "potatoes"], directions: "" } }, { recipe: { title: "", img: "", ingredients: ["carrots", "potatoes"], directions: "" } }, { recipe3: { title: "", img: "", ingredients: ["carrots", "potatoes"], directions: "" }}]
+    //     });
     }
-  
+
+    getEventName = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value,   
+        })
+    }
+
+
+
+    pushToFirebase = (event) => {
+        event.preventDefault();
+
+        const dbRef = firebase.database().ref(`events/${this.state.events[0].name}`);
+        dbRef.set({
+            guests: [{ name: "Aaron", ingredients: ["carrots", "potatoes", "tomatoes"] }],
+            recipes: [{ recipe1: { title: "", img: "", ingredients: [], directions: "" } }, { recipe: { title: "", img: "", ingredients: [], directions: "" } }, { recipe3: { title: "", img: "", ingredients: [], directions: "" }}]
+        });
+    }
+    
     render(){
     
         return (
@@ -38,9 +61,12 @@ class LandingPage extends Component {
                     </nav>
                 </header>
                 <section className="startForm">
-                    <form action="">
-                        <input className="createEvent" type="text"/>
+                    <form 
+                    // onSubmit={this.pushToFirebase} 
+                    action="">
+                        <input onChange={this.getEventName} name="createEvent" className="createEvent" type="text"/>
                         <button>
+                            Submit
                             {/* This button creates a new event object in the events array AND links to event page. */}
                         </button>      
                     </form>
