@@ -31,12 +31,7 @@ class RecipeGrid extends Component {
       url: `https://www.themealdb.com/api/json/v1/1/filter.php?c=${updatedCategory}`,
       method: 'GET',
       dataResponse: 'json'
-    })
-      .then(response => {
-        // response = promise object
-        return response;
-      })
-      .then(response => {
+    }).then(response => {
         //recipeArray is a placeholder array that is being used to store the recipes that the api retrieves
         // we use a placeholder array so that we can later pass the information into the userRecipes array in state
         // this process is necssary so that we don't manipulate the state directly!

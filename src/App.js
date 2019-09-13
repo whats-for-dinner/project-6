@@ -93,10 +93,9 @@ class App extends Component {
               );
             }}
           />
-          {/* <Route path="/contact" render={() =>{return <Contact name="colin" />}}/> */}
-          {/* the colon below tells router to expect a parameter. This value is going to be passed in later. */}
           <Route path="/dashboard/:" component={Dashboard} />
           <Route path="/recipegrid/:" component={RecipeGrid} />
+          {/* the below Route is saying: whenever the URL reads fullrecipe/(something),render the FullRecipeComponent.  But so that we can use info from that URL *in* the FullRecipe component, include a parameter so that that parameter can be accessed in the component.  In this case the 'idMeal' parameter tells the FullRecipe component where to look for props.match.params.idMeal.  It will look for this value by looking to the URL.  And since the URL is an ID number, it will use this ID to do its Axios call. */}
           <Route path="/fullrecipe/:idMeal" component={FullRecipe} />
         </div>
       </Router>

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import axios from 'axios';
 
+let returnedRecipe = []
+
 const FullRecipe = props => {
   axios({
     url: `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${props.match.params.idMeal}`,
@@ -9,7 +11,7 @@ const FullRecipe = props => {
     dataResponse: 'json'
   }).then(response => {
     // response = promise object
-    console.log(response);
+    returnedRecipe = (response.data.meals[0]);
   });
 
   return (
@@ -18,6 +20,7 @@ const FullRecipe = props => {
       <Link to="/">Home</Link>
       <Link to="/event/:">Event Page</Link>
       <Link to="/recipegrid/:">Recipes</Link>
+      {<img src={returnedRecipe.strMealThumb} alt=""/>}
     </div>
   );
 };
