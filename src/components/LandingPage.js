@@ -9,7 +9,9 @@ class LandingPage extends Component {
     constructor(){
         super();
         this.state = ({
-            events:[{name: "event1"}, {name:"event2"}]
+            events:[{name: "dummyEvent"}],
+            createEvent: "",
+
         })
 
 
@@ -28,11 +30,31 @@ class LandingPage extends Component {
     //     });
     }
 
+    // this function is for receiving the on change on the input and setting it to state
     getEventName = (event) => {
         this.setState({
             [event.target.name]: event.target.value,   
+        }) 
+
+    };
+
+    // this function runs on Submit
+    createEvent = (event) => {
+        event.preventDefault();
+        // taking the events array in state and copying it
+        const copyOfEvents = [...this.state.events];
+        // this is putting the input we saved in state into an object
+        const makeObject = {name: this.state.createEvent}
+        // we are pushing the object to the copy of the array in state
+        copyOfEvents.unshift(makeObject);
+        // updating the state of events to the new version of the array
+        this.setState({
+            events: copyOfEvents,
         })
+
     }
+
+     
 
 
 
@@ -63,6 +85,7 @@ class LandingPage extends Component {
                 <section className="startForm">
                     <form 
                     // onSubmit={this.pushToFirebase} 
+                    onSubmit={this.createEvent}
                     action="">
                         <input onChange={this.getEventName} name="createEvent" className="createEvent" type="text"/>
                         <button>
