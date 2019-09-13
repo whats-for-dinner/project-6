@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import axios from 'axios';
+import { link } from 'fs';
 
 class RecipeGrid extends Component {
   constructor() {
@@ -32,6 +33,7 @@ class RecipeGrid extends Component {
       dataResponse: 'json'
     })
       .then(response => {
+        // response = promise object
         return response;
       })
       .then(response => {
@@ -70,11 +72,17 @@ class RecipeGrid extends Component {
         </select>
 
         {this.state.userRecipes.map((recipe, i) => {
-          console.log(recipe);
           return (
-            <h1 key={recipe.idMeal}>
-              <Link to="/fullrecipe/">{recipe.idMeal}</Link>
-            </h1>
+            <div>
+              <ul>
+                <li id={recipe.idMeal}>
+                  <Link to={`/fullrecipe/${recipe.idMeal}`}>
+                    <h2>{recipe.strMeal}</h2>
+                    <img src={recipe.strMealThumb} />
+                  </Link>
+                </li>
+              </ul>
+            </div>
           );
         })}
       </div>
