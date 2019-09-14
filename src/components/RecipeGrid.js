@@ -32,17 +32,17 @@ class RecipeGrid extends Component {
       method: 'GET',
       dataResponse: 'json'
     }).then(response => {
-        //recipeArray is a placeholder array that is being used to store the recipes that the api retrieves
-        // we use a placeholder array so that we can later pass the information into the userRecipes array in state
-        // this process is necssary so that we don't manipulate the state directly!
-        const recipeArray = [];
+      //recipeArray is a placeholder array that is being used to store the recipes that the api retrieves
+      // we use a placeholder array so that we can later pass the information into the userRecipes array in state
+      // this process is necssary so that we don't manipulate the state directly!
+      const recipeArray = [];
 
-        recipeArray.push(response.data.meals);
+      recipeArray.push(response.data.meals);
 
-        this.setState({
-          userRecipes: recipeArray[0]
-        });
+      this.setState({
+        userRecipes: recipeArray[0]
       });
+    });
   };
 
   render() {

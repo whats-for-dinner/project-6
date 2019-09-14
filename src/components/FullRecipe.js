@@ -7,7 +7,9 @@ class FullRecipe extends React.Component {
     super();
     this.state = {
       recipeObject: '',
-      finalArray: []
+      finalIngredientsArray: [],
+      selectedImage: '',
+      selectedTitle: ''
     };
   }
 
@@ -23,7 +25,7 @@ class FullRecipe extends React.Component {
       });
       // console.log(this.state.recipeObject);
       {
-        const finalArray = [];
+        const finalIngredientsArray = [];
 
         for (let i = 1; i < 21; i++) {
           let currentItem = [];
@@ -40,17 +42,37 @@ class FullRecipe extends React.Component {
             currentItem.push(ingredient);
           }
 
-          finalArray.push(currentItem.join(' '));
+          finalIngredientsArray.push(currentItem.join(' '));
         }
 
         this.setState({
-          finalArray: finalArray
+          finalIngredientsArray: finalIngredientsArray
         });
       }
     });
   }
 
+  userSelectionToState = e => {
+    e.preventDefault();
+
+    this.setState(
+      {
+        selectedImage: this.state.recipeObject.strMealThumb,
+        selectedTitle: this.state.recipeObject.strMeal
+      },
+      this.props.sendUserSelectionToState(
+        e,
+        this.state.finalIngredientsArray,
+        this.state.recipeObject.strMealThumb,
+        this.state.recipeObject.strMeal
+      )
+    );
+  };
+
   render() {
+    {
+      console.log(this.props);
+    }
     return (
       <div className="">
         <h2>This is the full recipe page</h2>
@@ -59,9 +81,10 @@ class FullRecipe extends React.Component {
         <Link to="/recipegrid/:">Recipes</Link>
         <h1>{this.state.recipeObject.strMeal}</h1>
         <img src={this.state.recipeObject.strMealThumb} alt="" />
-        {this.state.finalArray.map(item => {
+        {this.state.finalIngredientsArray.map(item => {
           return <p>{item}</p>;
         })}
+        <button onClick={this.userSelectionToState}>Add Recipe to Event</button>
       </div>
     );
   }
