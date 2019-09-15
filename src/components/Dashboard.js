@@ -10,6 +10,8 @@ class EventPage extends Component {
             event: [],
             newGuest: "",
             guestList: [],
+            recipes: [],
+            testIngredients: ["3 carrots","2 tomatoes"],
         })
     }
 
@@ -20,12 +22,15 @@ class EventPage extends Component {
 
         dbRef.on('value', (data) => {
             const event = data.val();
-            const firebaseArray = Object.values(event);
 
+            const firebaseArray = Object.values(event);
+       
+            const recipes = Object.values(firebaseArray[2])
+    
             this.setState({
                 event: firebaseArray,
-                guestList: firebaseArray[1].guestList ? firebaseArray[1].guestList : []
-                // guestList: firebaseArray[1].guestList
+                guestList: firebaseArray[1].guestList ? firebaseArray[1].guestList : [],
+                recipes: firebaseArray[2] ? recipes : [], 
             })
         });
         
@@ -59,8 +64,18 @@ class EventPage extends Component {
         
     }
 
+    // test to add ingredients to a guest
+    addIngredient = (event) => {
+        event.preventDefault();
 
-    // link button for full recipe 
+        const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests/guestList/1`);
+
+        dbRef.update({
+            ingredients: this.state.testIngredients,
+        })
+
+    }
+
   
     render(){
         console.log(this.state.guestList)
@@ -73,7 +88,7 @@ class EventPage extends Component {
                 </button> */}
                 <Link to="/">Home</Link>
                 {/* Below link takes user to page where they select recipes */}
-                <Link to="/recipegrid/:">Recipes</Link>
+                <Link to={`/recipegrid/${this.props.match.params.partyName}`}>Recipes</Link>
                 {/* Below link is conditionally rendered if recipe exists.  Will contain an image that is determined by recipes in state. */}
                 <Link to="/fullrecipe/:">Full Recipe</Link>
                 <form onSubmit={this.addGuest} action="">
@@ -84,6 +99,20 @@ class EventPage extends Component {
                     <button id="clickToSubmitGuest">Add guest</button>
                 </form>
 
+                <section className="ingredients">
+                    <ul>
+                    {this.state.recipes ?
+                        this.state.recipes.map((recipe, recipeIndex) => {
+                            return (recipe.ingredients).map((ingredient, index) => {
+                                return <li key={recipeIndex + index}><div>{ingredient}</div></li>
+                            })
+                
+                        })
+                        : console.log("fail")}
+                    </ul>
+                        <button onClick={this.addIngredient}>test</button>
+                </section>
+
                 <section className="guests">
                     {this.state.guestList ?
                         // console.log(this.state.guestList)
@@ -91,10 +120,14 @@ class EventPage extends Component {
                             return (
                                 <div>
                                     <h3 key={guestIndex}>{guest.name}</h3>
+                                    
                                 </div> 
                             )
                         })
-                         : console.log("fail")}</section>
+                         : console.log("fail")}
+                </section>
+
+
             </div>
         
         );
