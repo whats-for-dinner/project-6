@@ -10,11 +10,21 @@ import './styles/App.scss';
 class App extends Component {
   constructor() {
     super();
+<<<<<<< HEAD
     this.state = {
       events: [],
       createEvent: ''
     };
   }
+=======
+    this.state = ({
+        events:[],
+        createEvent: "",
+        currentEvent: "",
+
+    })
+
+>>>>>>> test
 
   // function to add new event to Firebase 'event' array as new object.  New object contains all state information with empty strings as key values for any still undetermined info.
 
@@ -37,6 +47,7 @@ class App extends Component {
       [event.target.name]: event.target.value
     });
   };
+
 
   // this function runs on Submit
   createEvent = event => {
@@ -84,6 +95,7 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
+<<<<<<< HEAD
           <Route
             exact
             path="/"
@@ -98,6 +110,23 @@ class App extends Component {
             }}
           />
           <Route path="/dashboard/:" component={Dashboard} />
+=======
+          <Route exact path="/" render={() =>{return <LandingPage event={this.state.events} getEventName={this.getEventName} createEvent={this.createEvent} 
+          />}}/>
+          {/* <Route path="/contact" render={() =>{return <Contact name="colin" />}}/> */}
+          {/* the colon below tells router to expect a parameter. This value is going to be passed in later. */}
+
+
+          <Route path="/dashboard/:partyName" 
+          render={(props) => { 
+            return <Dashboard 
+                    {...props}
+                    event={this.state.events} 
+                    currentEvent={this.state.currentEvent}
+          />}}/>
+
+
+>>>>>>> test
           <Route path="/recipegrid/:" component={RecipeGrid} />
           {/* the below Route is saying: whenever the URL reads fullrecipe/(something),render the FullRecipeComponent.  But so that we can use info from that URL *in* the FullRecipe component, include a parameter so that that parameter can be accessed in the component.  In this case the 'idMeal' parameter tells the FullRecipe component where to look for props.match.params.idMeal.  It will look for this value by looking to the URL.  And since the URL is an ID number, it will use this ID to do its Axios call. */}
           <Route
