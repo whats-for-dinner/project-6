@@ -76,7 +76,7 @@ class EventPage extends Component {
         console.log(this.state.guestList)
         return (
             
-            <div className="">
+            <div className="dashBoard">
                 <h1>{this.state.event[0]}</h1>
                 {/* <button>
                     Add guests
