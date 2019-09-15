@@ -70,10 +70,6 @@ class App extends Component {
     );
   };
 
-  // sendUserSelectionToState = (e, ing, img, title) => {
-  //   e.preventDefault();
-  // };
-
   render() {
     return (
       <Router>
