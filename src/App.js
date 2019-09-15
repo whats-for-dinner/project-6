@@ -44,15 +44,6 @@ class App extends Component {
 
   };
 
-  // don't think we need this function anymore??
-  getPage = (eventIndex) => {
-    // console.log(eventIndex)
-    this.setState({
-      currentEvent: eventIndex
-    
-    })
-
-  };
 
   // this function runs on Submit
   createEvent = (event) => {
@@ -82,7 +73,8 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Route exact path="/" render={() =>{return <LandingPage event={this.state.events} getEventName={this.getEventName} createEvent={this.createEvent} getPage={this.getPage}/>}}/>
+          <Route exact path="/" render={() =>{return <LandingPage event={this.state.events} getEventName={this.getEventName} createEvent={this.createEvent} 
+          />}}/>
           {/* <Route path="/contact" render={() =>{return <Contact name="colin" />}}/> */}
           {/* the colon below tells router to expect a parameter. This value is going to be passed in later. */}
 

@@ -7,7 +7,6 @@ class EventPage extends Component {
     constructor(){
         super();
         this.state = ({
-            party: "",
             event: [],
             newGuest: "",
             guestList: [],
@@ -58,21 +57,12 @@ class EventPage extends Component {
             })
         })
         
-
-        // const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests`);
-
-        // dbRef.update({
-
-        // })
     }
 
 
     // link button for full recipe 
   
     render(){
-        // console.log(this.props.currentEvent)
-        // console.log(this.props.match.params.partyName)
-        // console.log(this.state.party)
         console.log(this.state.guestList)
         return (
             

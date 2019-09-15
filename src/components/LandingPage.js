@@ -40,7 +40,8 @@ const LandingPage = (props) => {
                     props.event.map((userEvents, eventIndex) => {
                         return (
                             // console.log(userEvents.eventName)
-                            <Link to={`/dashboard/${userEvents.eventName}`} onClick={() => props.getPage(eventIndex)} key={eventIndex}>{userEvents.eventName}</Link>
+                            <Link to={`/dashboard/${userEvents.eventName}`} 
+                            key={eventIndex}>{userEvents.eventName}</Link>
                         )
                     }
                 ):null}
