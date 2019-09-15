@@ -4,29 +4,107 @@ import axios from 'axios';
 import firebase from '../firebase';
 
 class EventPage extends Component {
+    constructor(){
+        super();
+        this.state = ({
+            party: "",
+            event: [],
+            newGuest: "",
+            guestList: [],
+        })
+    }
+
+    // problem only saving which url we are at onClick makes it so we cant refresh the page and have the right info show. We only get that value the moment the page is opened. need to solve this.props.match.params!! fuck
+    // component did mount- match event clicked to the right directory. Save index to state and use it in file path for firebase? use some variables?
+    componentDidMount() {
+        const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}`)
+
+        dbRef.on('value', (data) => {
+            const event = data.val();
+            const firebaseArray = Object.values(event);
+
+            this.setState({
+                event: firebaseArray,
+                guestList: firebaseArray[1].guestList ? firebaseArray[1].guestList : []
+                // guestList: firebaseArray[1].guestList
+            })
+        });
+        
+    }
+    
+    // event handler for name input and on submit for sending to firebase
+    getNewGuest = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value,
+        })  
+    }
+
+    addGuest = (event) => {
+        event.preventDefault();
+        
+        const copyOfGuests = [...this.state.guestList];
+
+        const makeObject = { name: this.state.newGuest}
+        
+        copyOfGuests.unshift(makeObject);
+
+        this.setState({
+            guestList: copyOfGuests,
+        }, () => {
+            const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests`);
+
+            dbRef.update({
+                guestList: this.state.guestList,
+            })
+        })
+        
+
+        // const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests`);
+
+        // dbRef.update({
+
+        // })
+    }
+
+
+    // link button for full recipe 
   
     render(){
-        console.log(this.props.currentEvent)
+        // console.log(this.props.currentEvent)
         // console.log(this.props.match.params.partyName)
+        // console.log(this.state.party)
+        console.log(this.state.guestList)
         return (
-        
+            
             <div className="">
-                <h1>(Name of event)</h1>
-                <button>
+                <h1>{this.state.event[0]}</h1>
+                {/* <button>
                     Add guests
-                </button>
+                </button> */}
                 <Link to="/">Home</Link>
                 {/* Below link takes user to page where they select recipes */}
                 <Link to="/recipegrid/:">Recipes</Link>
                 {/* Below link is conditionally rendered if recipe exists.  Will contain an image that is determined by recipes in state. */}
                 <Link to="/fullrecipe/:">Full Recipe</Link>
-                <form action="">
+                <form onSubmit={this.addGuest} action="">
                     <label htmlFor="addGuest"></label>
-                    Below input adds guest to guest array on event object in Firebase.
-                    <input type="text" id="addGuest"/>
+                    {/* Below input adds guest to guest array on event object in Firebase. */}
+                    <input onChange={this.getNewGuest} name="newGuest" placeholder="add a new guest one at a time" type="text" id="addGuest"/>
                     <label htmlFor="clickToSubmitGuest"></label>
                     <button id="clickToSubmitGuest">Add guest</button>
                 </form>
+
+                <section className="guests">
+                    {this.state.guestList ?
+                        // console.log(this.state.guestList)
+                        this.state.guestList.map((guest, guestIndex) => {
+                            return (
+                                <div>
+                                    <h3 key={guestIndex}>{guest.name}</h3>
+                                </div> 
+                            )
+                        })
+                         : console.log("fail")}</section>
             </div>
         
         );
