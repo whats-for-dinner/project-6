@@ -47,6 +47,37 @@ class RecipeGrid extends Component {
 
   render() {
     return (
+<<<<<<< HEAD
+      <div className=''>
+        <Link to='/'>Home</Link>
+        <Link to='/event/:'>Event Page</Link>
+        <header>
+          <h1>Find a recipe</h1>
+        </header>
+        <form action=''>
+          <select onChange={this.updateUserCategory} name='' id=''>
+            <option value='Beef'>Beef</option>
+            <option value='Chicken'>Chicken</option>
+            <option value='Dessert'>Dessert</option>
+            <option value='Lamb'>Lamb</option>
+            <option value='Pasta'>Pasta</option>
+            <option value='Pork'>Pork</option>
+            <option value='Seafood'>Seafood</option>
+            <option value='Side'>Side</option>
+            <option value='Starter'>Starter</option>
+            <option value='Vegan'>Vegan</option>
+            <option value='Vegetarian'>Vegetarian</option>
+            <option value='Miscellaneous'>Miscellaneous</option>
+          </select>
+        </form>
+        <div>
+          <ul className='recipePreviews'>
+            {this.state.userRecipes.map((recipe, i) => {
+              return (
+                <li id={recipe.idMeal}>
+                  <Link
+                    to={`/fullrecipe/${recipe.idMeal}/${this.props.match.params.partyName}`}>
+=======
       <div className="">
         <Link to="/">Home</Link>
         <Link to="/event/:">Event Page</Link>
@@ -72,14 +103,22 @@ class RecipeGrid extends Component {
               <ul>
                 <li id={recipe.idMeal}>
                   <Link to={`/fullrecipe/${recipe.idMeal}/${this.props.match.params.partyName}`}>
+>>>>>>> test
                     <h2>{recipe.strMeal}</h2>
                     <img src={recipe.strMealThumb} />
                   </Link>
                 </li>
+<<<<<<< HEAD
+              );
+            })}
+          </ul>
+        </div>
+=======
               </ul>
             </div>
           );
         })}
+>>>>>>> test
       </div>
     );
   }
