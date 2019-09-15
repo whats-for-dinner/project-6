@@ -14,17 +14,23 @@ class FullRecipe extends React.Component {
   }
 
   componentDidMount() {
+    // Make an API call on page load, based on the param (idMeal) that is passed in through the URL, this is why on the FullRecipe.js Route on App.js we destructured {match}, in order to make this work.
     axios({
       url: `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${this.props.match.params.idMeal}`,
       method: 'GET',
       dataResponse: 'json'
     }).then(response => {
+      // save the part of the object we need (from response) in the state
       const recipe = response.data.meals[0];
       this.setState({
         recipeObject: recipe
       });
-      // console.log(this.state.recipeObject);
       {
+        // this entire section is used to:
+        // 1) loop through the response object
+        // 2) get the measurements and ingredients the recipe selected
+        // 3) join each individual ingredient with its measurement as array items
+        // 4) assign this array of coupled ingredients and measurements into state via setstate
         const finalIngredientsArray = [];
 
         for (let i = 1; i < 21; i++) {
@@ -90,6 +96,3 @@ class FullRecipe extends React.Component {
   }
 }
 export default FullRecipe;
-
-//strIngredient1
-// strMeasure1
