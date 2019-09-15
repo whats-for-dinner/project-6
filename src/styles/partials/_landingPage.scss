@@ -1,7 +1,7 @@
 // general layout of landing page
 .landingPage {
     header {
-        height: 6vh;
+        height: 75px;
         padding: 5px;
         display: flex;
         justify-content: center;
@@ -12,12 +12,18 @@
         justify-content: center;
     }
     .start {
-        padding: 40px 0;
-        background: $offWhite;
+        // padding: 40px 0;
+        // background: $offWhite;
+        background-image:url('../../images/heroImage.png/');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: right;
+        height: 70vh;
     }
     .startContainer {
-        // height: 90vh;
+        height: 100%;
         display: flex;
+        align-items: center;
         // background: $black;
     }
     .events {
@@ -27,35 +33,52 @@
 
 
 header {
-    // background-color: $yellow;
+    background-color: $yellow;
     color: white;
     h1 {
         font-family: $heading;
         color: $black;
-        width: 700px;
-        // border: 1px solid $black;
+        border: 1.6px solid $black;
+        padding: 6px 20px;
         // background: $white;
-        padding: 20px 0;
         font-weight: 700;
+        font-size: 2.9rem;
     }
 }
 
 button {
-    width: 180px;
+    width: 150px;
+    height: 60px;
+    font-family: $body;
+    font-weight: 600;
+    background: $yellow;
+    text-transform: uppercase;
+    border: none;
+    box-shadow: 1px 1px 2px $black;
+}
+
+button.submit {
+    margin-right: 5px;
+}
+
+button.skipToEvents {
+    margin-left: 5px;
 }
 
 .skipToEvents {
 
 }
 
-.startImage {
-    width: 50%;
-    img {
-        width: 100%;
-    }
-}
 
 .startForm {
-    width: 50%;
-    background: white;
+    // width: 100%;
+    text-align: left;
+    input {
+        width: 350px;
+        height: 60px;
+        margin-right: 10px;
+    }
+    display: flex;
+    background: $offWhite;
+    padding: 20px;
 }

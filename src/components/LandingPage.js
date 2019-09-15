@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
-import heroImage from '../images/heroImage.jpg'
+import heroImage from '../images/heroImage.png'
 import firebase from '../firebase';
 
 
@@ -21,22 +21,20 @@ const LandingPage = (props) => {
             </header>
             <section className="start">
                 <div className="wrapper startContainer">
-                    <div className="startImage">
-                        <img src={heroImage} alt=""/>
-                    </div>
                     <div className="startForm">
                         <form 
                         // onSubmit={this.pushToFirebase} 
                         onSubmit={props.createEvent}
                         action="">
                             <input onChange={props.getEventName} name="createEvent" className="createEvent" type="text"/>
-                            <button>
+                            <button className="submit">
                                 Submit
                                 {/* This button creates a new event object in the events array AND links to event page. */}
                             </button>      
                         </form>
+                        <p>or</p>
                         <button className="skipToEvents">
-                            Skip to Events
+                            Skip
                             {/* link to events (scroll) */}
                         </button>
                     </div>

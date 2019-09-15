@@ -1,6 +1,7 @@
 @import 'partials/setup';
 @import 'partials/variables';
 @import 'partials/landingPage';
+@import 'partials/recipeGrid';
 
 html {
     font-size: 62.5%;
@@ -10,6 +11,7 @@ body {
     background-color: white;
     color: black;
     font-size: 2rem;
+    font-family: $body;
 }
 
 .wrapper {
