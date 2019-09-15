@@ -84,7 +84,7 @@ class EventPage extends Component {
                 </button> */}
                 <Link to="/">Home</Link>
                 {/* Below link takes user to page where they select recipes */}
-                <Link to="/recipegrid/:">Recipes</Link>
+                <Link to={`/recipegrid/${this.props.match.params.partyName}`}>Recipes</Link>
                 {/* Below link is conditionally rendered if recipe exists.  Will contain an image that is determined by recipes in state. */}
                 <Link to="/fullrecipe/:">Full Recipe</Link>
                 <form onSubmit={this.addGuest} action="">

@@ -71,7 +71,7 @@ class RecipeGrid extends Component {
             <div>
               <ul>
                 <li id={recipe.idMeal}>
-                  <Link to={`/fullrecipe/${recipe.idMeal}`}>
+                  <Link to={`/fullrecipe/${recipe.idMeal}/${this.props.match.params.partyName}`}>
                     <h2>{recipe.strMeal}</h2>
                     <img src={recipe.strMealThumb} />
                   </Link>

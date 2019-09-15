@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import axios from 'axios';
+import firebase from '../firebase';
 
 class FullRecipe extends React.Component {
   constructor() {
@@ -58,22 +59,36 @@ class FullRecipe extends React.Component {
     });
   }
 
-  userSelectionToState = e => {
-    e.preventDefault();
+  // userSelectionToState = e => {
+  //   e.preventDefault();
 
-    this.setState(
-      {
-        selectedImage: this.state.recipeObject.strMealThumb,
-        selectedTitle: this.state.recipeObject.strMeal
-      },
-      this.props.sendUserSelectionToState(
-        e,
-        this.state.finalIngredientsArray,
-        this.state.recipeObject.strMealThumb,
-        this.state.recipeObject.strMeal
-      )
-    );
-  };
+  //   this.setState(
+  //     {
+  //       selectedImage: this.state.recipeObject.strMealThumb,
+  //       selectedTitle: this.state.recipeObject.strMeal
+  //     },
+  //     this.props.sendUserSelectionToState(
+  //       e,
+  //       this.state.finalIngredientsArray,
+  //       this.state.recipeObject.strMealThumb,
+  //       this.state.recipeObject.strMeal
+  //     )
+  //   );
+  // };
+
+  sendToFirebase = (event) => {
+    event.preventDefault();
+
+    const newRecipeObject = {recipe: this.state.recipeObject, ingredients: this.state.finalIngredientsArray}
+
+    const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/recipes`)
+
+    dbRef.update({
+      [this.state.recipeObject.strMeal]: newRecipeObject,
+    })
+
+
+  }
 
   render() {
     {
@@ -84,13 +99,13 @@ class FullRecipe extends React.Component {
         <h2>This is the full recipe page</h2>
         <Link to="/">Home</Link>
         <Link to="/event/:">Event Page</Link>
-        <Link to="/recipegrid/:">Recipes</Link>
+        <Link to={`/recipegrid/${this.props.match.params.partyName}`}>Recipes</Link>
         <h1>{this.state.recipeObject.strMeal}</h1>
         <img src={this.state.recipeObject.strMealThumb} alt="" />
         {this.state.finalIngredientsArray.map(item => {
           return <p>{item}</p>;
         })}
-        <button onClick={this.userSelectionToState}>Add Recipe to Event</button>
+        <button onClick={this.sendToFirebase}>Add Recipe to Event</button>
       </div>
     );
   }
