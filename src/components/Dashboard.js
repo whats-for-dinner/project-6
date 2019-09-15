@@ -10,6 +10,7 @@ class EventPage extends Component {
             event: [],
             newGuest: "",
             guestList: [],
+            recipes: [],
             testIngredients: ["3 carrots","2 tomatoes"],
         })
     }
@@ -21,12 +22,15 @@ class EventPage extends Component {
 
         dbRef.on('value', (data) => {
             const event = data.val();
-            const firebaseArray = Object.values(event);
 
+            const firebaseArray = Object.values(event);
+       
+            const recipes = Object.values(firebaseArray[2])
+    
             this.setState({
                 event: firebaseArray,
-                guestList: firebaseArray[1].guestList ? firebaseArray[1].guestList : []
-                // guestList: firebaseArray[1].guestList
+                guestList: firebaseArray[1].guestList ? firebaseArray[1].guestList : [],
+                recipes: firebaseArray[2] ? recipes : [], 
             })
         });
         
@@ -96,16 +100,16 @@ class EventPage extends Component {
                 </form>
 
                 <section className="ingredients">
-                    {this.state.testIngredients ?
-                        this.state.testIngredients.map((ingredient, index) => {
-                            return (
-                                <div>
-                                    <p key={index}>{ingredient}</p>
-                                </div>
-                            )
+                    <ul>
+                    {this.state.recipes ?
+                        this.state.recipes.map((recipe, recipeIndex) => {
+                            return (recipe.ingredients).map((ingredient, index) => {
+                                return <li key={recipeIndex + index}><div>{ingredient}</div></li>
+                            })
+                
                         })
                         : console.log("fail")}
-
+                    </ul>
                         <button onClick={this.addIngredient}>test</button>
                 </section>
 
