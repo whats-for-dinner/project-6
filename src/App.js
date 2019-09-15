@@ -28,7 +28,7 @@ class App extends Component {
       const firebaseArray = Object.values(savedEvents);
 
       this.setState({
-        events: firebaseArray
+        events: firebaseArray ? firebaseArray : []
       });
     });
   }
@@ -62,18 +62,9 @@ class App extends Component {
           .ref(`events/${this.state.events[0].name}`);
         dbRef.set({
           eventName: this.state.events[0].name,
-          guests: [{ name: '', ingredients: [''] }],
-          recipes: [
-            {
-              recipe1: { title: '', img: '', ingredients: [''], directions: '' }
-            },
-            {
-              recipe: { title: '', img: '', ingredients: [''], directions: '' }
-            },
-            {
-              recipe3: { title: '', img: '', ingredients: [''], directions: '' }
-            }
-          ]
+          guests: [],
+          recipes: []
+        
         });
       }
     );

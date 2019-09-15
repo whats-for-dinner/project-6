@@ -88,9 +88,9 @@ class EventPage extends Component {
                 </button> */}
                 <Link to="/">Home</Link>
                 {/* Below link takes user to page where they select recipes */}
-                <Link to={`/recipegrid/${this.props.match.params.partyName}`}>Recipes</Link>
+                <Link to={`/recipegrid/${this.props.match.params.partyName}`}>Find Recipes</Link>
                 {/* Below link is conditionally rendered if recipe exists.  Will contain an image that is determined by recipes in state. */}
-                <Link to="/fullrecipe/:">Full Recipe</Link>
+                {/* <Link to="/fullrecipe/:">Full Recipe</Link> */}
                 <form onSubmit={this.addGuest} action="">
                     <label htmlFor="addGuest"></label>
                     {/* Below input adds guest to guest array on event object in Firebase. */}
@@ -101,11 +101,12 @@ class EventPage extends Component {
 
                 <section className="ingredients">
                     <ul>
+                        {/* {this.state.recipes ? console.log("recipies",this.state.recipes) : console.log("no")} */}
                     {this.state.recipes ?
                         this.state.recipes.map((recipe, recipeIndex) => {
-                            return (recipe.ingredients).map((ingredient, index) => {
+                            return recipe.ingredients ? (recipe.ingredients).map((ingredient, index) => {
                                 return <li key={recipeIndex + index}><div>{ingredient}</div></li>
-                            })
+                            }) : console.log("no")
                 
                         })
                         : console.log("fail")}

@@ -11,12 +11,6 @@ const LandingPage = (props) => {
         <div className="landingPage">
             <header className="landingHeader">
                 <h1>What's For Dinner?</h1>
-                <nav>
-                <ul>
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/event/:">Event Page</Link></li>
-                </ul>
-                </nav>
             </header>
             <section className="startForm">
                 <form 
