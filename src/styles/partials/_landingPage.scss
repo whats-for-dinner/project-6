@@ -1,0 +1,84 @@
+// general layout of landing page
+.landingPage {
+    header {
+        height: 75px;
+        padding: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    ul {
+        display: flex;
+        justify-content: center;
+    }
+    .start {
+        // padding: 40px 0;
+        // background: $offWhite;
+        background-image:url('../../images/heroImage.png/');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: right;
+        height: 70vh;
+    }
+    .startContainer {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        // background: $black;
+    }
+    .events {
+        // height: 100vh;
+    }
+}
+
+
+header {
+    background-color: $yellow;
+    color: white;
+    h1 {
+        font-family: $heading;
+        color: $black;
+        border: 1.6px solid $black;
+        padding: 6px 20px;
+        // background: $white;
+        font-weight: 700;
+        font-size: 2.9rem;
+    }
+}
+
+button {
+    width: 150px;
+    height: 60px;
+    font-family: $body;
+    font-weight: 600;
+    background: $yellow;
+    text-transform: uppercase;
+    border: none;
+    box-shadow: 1px 1px 2px $black;
+}
+
+button.submit {
+    margin-right: 5px;
+}
+
+button.skipToEvents {
+    margin-left: 5px;
+}
+
+.skipToEvents {
+
+}
+
+
+.startForm {
+    // width: 100%;
+    text-align: left;
+    input {
+        width: 350px;
+        height: 60px;
+        margin-right: 10px;
+    }
+    display: flex;
+    background: $offWhite;
+    padding: 20px;
+}
