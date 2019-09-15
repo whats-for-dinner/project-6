@@ -62,8 +62,8 @@ class App extends Component {
           .ref(`events/${this.state.events[0].name}`);
         dbRef.set({
           eventName: this.state.events[0].name,
-          guests: [],
-          recipes: []
+          guests: [""],
+          recipes: [""]
         
         });
       }
