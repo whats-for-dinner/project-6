@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import axios from 'axios';
+import { link } from 'fs';
 
 class RecipeGrid extends Component {
   constructor() {
@@ -30,22 +31,18 @@ class RecipeGrid extends Component {
       url: `https://www.themealdb.com/api/json/v1/1/filter.php?c=${updatedCategory}`,
       method: 'GET',
       dataResponse: 'json'
-    })
-      .then(response => {
-        return response;
-      })
-      .then(response => {
-        //recipeArray is a placeholder array that is being used to store the recipes that the api retrieves
-        // we use a placeholder array so that we can later pass the information into the userRecipes array in state
-        // this process is necssary so that we don't manipulate the state directly!
-        const recipeArray = [];
+    }).then(response => {
+      //recipeArray is a placeholder array that is being used to store the recipes that the api retrieves
+      // we use a placeholder array so that we can later pass the information into the userRecipes array in state
+      // this process is necssary so that we don't manipulate the state directly!
+      const recipeArray = [];
 
-        recipeArray.push(response.data.meals);
+      recipeArray.push(response.data.meals);
 
-        this.setState({
-          userRecipes: recipeArray[0]
-        });
+      this.setState({
+        userRecipes: recipeArray[0]
       });
+    });
   };
 
   render() {
@@ -70,11 +67,17 @@ class RecipeGrid extends Component {
         </select>
 
         {this.state.userRecipes.map((recipe, i) => {
-          console.log(recipe);
           return (
-            <h1 key={recipe.idMeal}>
-              <Link to="/fullrecipe/">{recipe.idMeal}</Link>
-            </h1>
+            <div>
+              <ul>
+                <li id={recipe.idMeal}>
+                  <Link to={`/fullrecipe/${recipe.idMeal}`}>
+                    <h2>{recipe.strMeal}</h2>
+                    <img src={recipe.strMealThumb} />
+                  </Link>
+                </li>
+              </ul>
+            </div>
           );
         })}
       </div>
