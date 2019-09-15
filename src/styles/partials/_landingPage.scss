@@ -1,0 +1,61 @@
+// general layout of landing page
+.landingPage {
+    header {
+        height: 6vh;
+        padding: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    ul {
+        display: flex;
+        justify-content: center;
+    }
+    .start {
+        padding: 40px 0;
+        background: $offWhite;
+    }
+    .startContainer {
+        // height: 90vh;
+        display: flex;
+        // background: $black;
+    }
+    .events {
+        // height: 100vh;
+    }
+}
+
+
+header {
+    // background-color: $yellow;
+    color: white;
+    h1 {
+        font-family: $heading;
+        color: $black;
+        width: 700px;
+        // border: 1px solid $black;
+        // background: $white;
+        padding: 20px 0;
+        font-weight: 700;
+    }
+}
+
+button {
+    width: 180px;
+}
+
+.skipToEvents {
+
+}
+
+.startImage {
+    width: 50%;
+    img {
+        width: 100%;
+    }
+}
+
+.startForm {
+    width: 50%;
+    background: white;
+}

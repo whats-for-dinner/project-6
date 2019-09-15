@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import heroImage from '../images/heroImage.jpg'
 import firebase from '../firebase';
 
 
@@ -11,27 +12,35 @@ const LandingPage = (props) => {
         <div className="landingPage">
             <header className="landingHeader">
                 <h1>What's For Dinner?</h1>
-                <nav>
-                <ul>
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/event/:">Event Page</Link></li>
-                </ul>
-                </nav>
+                {/* <nav>
+                    <ul>
+                        <li><Link to="/">Home</Link></li>
+                        <li><Link to="/event/:">Event Page</Link></li>
+                    </ul>
+                </nav> */}
             </header>
-            <section className="startForm">
-                <form 
-                // onSubmit={this.pushToFirebase} 
-                onSubmit={props.createEvent}
-                action="">
-                    <input onChange={props.getEventName} name="createEvent" className="createEvent" type="text"/>
-                    <button>
-                        Submit
-                        {/* This button creates a new event object in the events array AND links to event page. */}
-                    </button>      
-                </form>
-                <button>
-                    {/* link to events (scroll) */}
-                </button>
+            <section className="start">
+                <div className="wrapper startContainer">
+                    <div className="startImage">
+                        <img src={heroImage} alt=""/>
+                    </div>
+                    <div className="startForm">
+                        <form 
+                        // onSubmit={this.pushToFirebase} 
+                        onSubmit={props.createEvent}
+                        action="">
+                            <input onChange={props.getEventName} name="createEvent" className="createEvent" type="text"/>
+                            <button>
+                                Submit
+                                {/* This button creates a new event object in the events array AND links to event page. */}
+                            </button>      
+                        </form>
+                        <button className="skipToEvents">
+                            Skip to Events
+                            {/* link to events (scroll) */}
+                        </button>
+                    </div>
+                </div>
             </section>
             <section className="events">
                 {/* map through this.state.events and return events to page as <li> elements in <Link>s. */}
