@@ -98,7 +98,7 @@ class FullRecipe extends React.Component {
       <div className="">
         <h2>This is the full recipe page</h2>
         <Link to="/">Home</Link>
-        <Link to="/event/:">Event Page</Link>
+        <Link to={`/dashboard/${this.props.match.params.partyName}`}>Event Dashboard</Link>
         <Link to={`/recipegrid/${this.props.match.params.partyName}`}>Recipes</Link>
         <h1>{this.state.recipeObject.strMeal}</h1>
         <img src={this.state.recipeObject.strMealThumb} alt="" />
