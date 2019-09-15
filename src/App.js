@@ -17,7 +17,7 @@ class App extends Component {
 
     })
 
-
+  }
   // function to add new event to Firebase 'event' array as new object.  New object contains all state information with empty strings as key values for any still undetermined info.
 
   componentDidMount() {
