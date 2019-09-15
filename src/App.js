@@ -44,6 +44,7 @@ class App extends Component {
 
   };
 
+  // don't think we need this function anymore??
   getPage = (eventIndex) => {
     // console.log(eventIndex)
     this.setState({
@@ -84,7 +85,17 @@ class App extends Component {
           <Route exact path="/" render={() =>{return <LandingPage event={this.state.events} getEventName={this.getEventName} createEvent={this.createEvent} getPage={this.getPage}/>}}/>
           {/* <Route path="/contact" render={() =>{return <Contact name="colin" />}}/> */}
           {/* the colon below tells router to expect a parameter. This value is going to be passed in later. */}
-          <Route path="/dashboard/" render={() => { return <Dashboard event={this.state.events} currentEvent={this.state.currentEvent}/>}}/>
+
+
+          <Route path="/dashboard/:partyName" 
+          render={(props) => { 
+            return <Dashboard 
+                    {...props}
+                    event={this.state.events} 
+                    currentEvent={this.state.currentEvent}
+          />}}/>
+
+
           <Route path="/recipegrid/:" component={RecipeGrid} />
           <Route path="/fullrecipe/:" component={FullRecipe} />
         </div>
