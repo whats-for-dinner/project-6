@@ -10,6 +10,7 @@ class EventPage extends Component {
             event: [],
             newGuest: "",
             guestList: [],
+            testIngredients: ["3 carrots","2 tomatoes"],
         })
     }
 
@@ -59,8 +60,18 @@ class EventPage extends Component {
         
     }
 
+    // test to add ingredients to a guest
+    addIngredient = (event) => {
+        event.preventDefault();
 
-    // link button for full recipe 
+        const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests/guestList/1`);
+
+        dbRef.update({
+            ingredients: this.state.testIngredients,
+        })
+
+    }
+
   
     render(){
         console.log(this.state.guestList)
@@ -84,6 +95,20 @@ class EventPage extends Component {
                     <button id="clickToSubmitGuest">Add guest</button>
                 </form>
 
+                <section className="ingredients">
+                    {this.state.testIngredients ?
+                        this.state.testIngredients.map((ingredient, index) => {
+                            return (
+                                <div>
+                                    <p key={index}>{ingredient}</p>
+                                </div>
+                            )
+                        })
+                        : console.log("fail")}
+
+                        <button onClick={this.addIngredient}>test</button>
+                </section>
+
                 <section className="guests">
                     {this.state.guestList ?
                         // console.log(this.state.guestList)
@@ -91,10 +116,14 @@ class EventPage extends Component {
                             return (
                                 <div>
                                     <h3 key={guestIndex}>{guest.name}</h3>
+                                    
                                 </div> 
                             )
                         })
-                         : console.log("fail")}</section>
+                         : console.log("fail")}
+                </section>
+
+
             </div>
         
         );
