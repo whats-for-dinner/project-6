@@ -1,6 +1,5 @@
 import React,{Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
-import axios from 'axios';
 import firebase from '../firebase';
 
 class EventPage extends Component {
@@ -11,7 +10,6 @@ class EventPage extends Component {
             newGuest: "",
             guestList: [],
             recipes: [],
-            testIngredients: ["3 carrots","2 tomatoes"],
             currentGuest: "",
             currentIngredients: [],
         })
@@ -44,8 +42,9 @@ class EventPage extends Component {
         this.setState({
             [event.target.name]: event.target.value,
         })  
-    }
 
+    }
+    
     addGuest = (event) => {
         event.preventDefault();
         
@@ -57,11 +56,13 @@ class EventPage extends Component {
 
         this.setState({
             guestList: copyOfGuests,
+            newGuest: ''
         }, () => {
             const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests`);
 
             dbRef.update({
                 guestList: this.state.guestList,
+                
             })
         })
         
@@ -75,8 +76,13 @@ class EventPage extends Component {
 
         dbRef.update({
             ingredients: this.state.currentIngredients,
-        })
-
+        }
+        , () => {
+            this.setState({
+                currentIngredients: [],
+            })
+        }
+        )
     }
 
     currentGuest = (event) => {
@@ -87,6 +93,7 @@ class EventPage extends Component {
             currentGuest: string,
         })  
     }
+
     selectIngredient = (event) => {
         event.preventDefault();
 
@@ -101,9 +108,30 @@ class EventPage extends Component {
         })
     }
 
+    removeFromCart = (event) => {
+        event.preventDefault();
+
+        const ingredient = event.target.value
+        
+        const index = parseInt(ingredient, 10)
+    
+        const copyOfCart = this.state.currentIngredients
+    
+        copyOfCart.splice(index, 1)
+        
+        this.setState({
+            currentIngredients: copyOfCart,
+        })
+    }
+
+    
+
   
     render(){
         // console.log(this.state.guestList)
+        const isEnabled = this.state.newGuest.length > 0;
+        const cartIsEnabled = this.state.currentGuest !== "" && this.state.currentIngredients !== []
+        
         return (
             
             <div className="dashBoard">
@@ -119,9 +147,10 @@ class EventPage extends Component {
                 <form onSubmit={this.addGuest} action="">
                     <label htmlFor="addGuest"></label>
                     {/* Below input adds guest to guest array on event object in Firebase. */}
-                    <input onChange={this.getNewGuest} name="newGuest" placeholder="add a new guest one at a time" type="text" id="addGuest"/>
+
+                    <input onChange={this.getNewGuest} name="newGuest" placeholder="add a new guest one at a time" value={this.state.newGuest} type="text" id="addGuest"/>
                     <label htmlFor="clickToSubmitGuest"></label>
-                    <button id="clickToSubmitGuest">Add guest</button>
+                    <button disabled={!isEnabled} id="clickToSubmitGuest">Add guest</button>
                 </form>
 
                 <section>
@@ -131,7 +160,7 @@ class EventPage extends Component {
                         this.state.recipes.map((recipe, recipeIndex) => {
                             return (
                                 // console.log(recipe.recipe.strMeal)
-                                 <Link to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`}>
+                                 <Link key={recipeIndex}to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`}>
                                     
                                         <h3>{recipe.recipe.strMeal}</h3>
                                          <img src={recipe.recipe.strMealThumb} alt={recipe.recipe.strMeal}/>
@@ -184,7 +213,10 @@ class EventPage extends Component {
                                 // console.log(this.state.guestList)
                                 this.state.currentIngredients.map((ingredient, ingredientIndex) => {
                                     return (
-                                        <li key={ingredientIndex}>{ingredient}</li>
+                                        <div>
+                                        	<li key={ingredientIndex}>{ingredient}</li>
+                                            <button value={ingredientIndex} onClick={this.removeFromCart}>Remove</button>
+                                        </div>
                                     )
                                 })
                                 : console.log("fail")
@@ -192,7 +224,8 @@ class EventPage extends Component {
                         </ul>    
                         </div>
                         {/* button pushes to firebase */}
-                        <button onClick={this.addIngredient}>Save</button>
+                        <button disabled={!cartIsEnabled} onClick={this.addIngredient}>Save</button>
+                        {!cartIsEnabled && <p>Please check you have selected a guest and some ingredients</p>}
                     </form>    
                 </section>
 

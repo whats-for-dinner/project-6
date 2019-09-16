@@ -1,16 +1,101 @@
+// Nav style
+
+.navContainer {
+  max-width: 90%;
+  margin: 0 auto;
+  text-align: right;
+  padding: 20px 0px;
+  .link:hover {
+    color: $red;
+  }
+  .link:not(:last-of-type) {
+    padding-right: 20px;
+  }
+}
+
 // Grid styles
 
 ul.recipePreviews {
+  max-width: 90%;
+  margin: 10% auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-template-columns: 1fr 1fr 1fr;
   grid-row-gap: 15px;
-  grid-column-gap: 15px;
+  grid-column-gap: 25px;
+  @include mq-930 {
+    grid-template-columns: 1fr 1fr;
+  }
+  @include mq-500 {
+    grid-template-columns: 1fr;
+  }
   li {
     width: 100%;
-    max-width: 300px;
     box-shadow: 2px 2px 2px rgba(24, 24, 24, 0.5);
+    h2 {
+      width: 100%;
+      padding: 15px 5px;
+      color: black;
+      background-color: $yellow;
+      font-size: 2.25rem;
+      min-height: 80px;
+      font-weight: 400;
+      text-transform: uppercase;
+      @include mq-930 {
+        padding: 10px 5px;
+        font-size: 1.75rem;
+      }
+    }
   }
   img {
-    width: 30%;
+    max-width: 100%;
   }
+}
+
+// Select style
+
+.box {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.box select {
+  background-color: $black;
+  color: $yellow;
+  padding: 12px;
+  width: 200px;
+  border: none;
+  font-size: 20px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  -webkit-appearance: button;
+  appearance: button;
+  outline: none;
+  @include mq-500 {
+    padding: 8px;
+  }
+}
+
+select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 $yellow;
+}
+
+.box::before {
+  content: '\25BD';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20%;
+  height: 100%;
+  text-align: center;
+  font-size: 28px;
+  line-height: 45px;
+  color: $yellow;
+  background-color: $black;
+  pointer-events: none;
+}
+
+.box select option {
+  padding: 30px;
 }

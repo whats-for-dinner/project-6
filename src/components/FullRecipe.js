@@ -8,9 +8,7 @@ class FullRecipe extends React.Component {
     super();
     this.state = {
       recipeObject: '',
-      finalIngredientsArray: [],
-      selectedImage: '',
-      selectedTitle: ''
+      finalIngredientsArray: []
     };
   }
 
@@ -28,10 +26,11 @@ class FullRecipe extends React.Component {
       });
       {
         // this entire section is used to:
-        // 1) loop through the response object
-        // 2) get the measurements and ingredients the recipe selected
-        // 3) join each individual ingredient with its measurement as array items
-        // 4) assign this array of coupled ingredients and measurements into state via setstate
+        // 1) loop through the response/recipe object 20 times
+        // 2) get the measurements and ingredients from the ingredients keys and measurement keys of the response/recipe object
+        // 3) push each individual ingredient with its corresponding (identically numbered) measurement in an array and join() them.
+        // 4) push this array of joined ingredient and measurement into another finalIngredientsArray.
+        //5) Put the finalIngredientArray in state with setState. 
         const finalIngredientsArray = [];
 
         for (let i = 1; i < 21; i++) {
@@ -39,17 +38,28 @@ class FullRecipe extends React.Component {
           let measurement = [];
           let ingredient = [];
 
-          if (this.state.recipeObject[`strMeasure${i}`]) {
+          //ensures that null and empty strings don't get added to a currentItem array, and therefore don't get added to the finalIngredientArray
+
+          if (this.state.recipeObject[`strMeasure${i}`] && this.state.recipeObject[`strMeasure${i}`] !=="") {
             measurement = this.state.recipeObject[`strMeasure${i}`];
             currentItem.push(measurement);
           }
 
-          if (this.state.recipeObject[`strIngredient${i}`]) {
+          if (this.state.recipeObject[`strIngredient${i}`] && this.state.recipeObject[`strIngredient${i}`] !=="") {
             ingredient = this.state.recipeObject[`strIngredient${i}`];
             currentItem.push(ingredient);
           }
 
+          //error handling for when ingredients print out e.g. "to serve salt."  Changes to "salt for serving"
+          if (currentItem[0] === "to serve"){
+            currentItem = [currentItem[1],"for serving"]
+          }
+
+          if (currentItem.length !== 0) {
           finalIngredientsArray.push(currentItem.join(' '));
+          }
+
+          // finalIngredientsArray.push(currentItem.join(' '));
         }
 
         this.setState({
@@ -95,17 +105,34 @@ class FullRecipe extends React.Component {
       console.log(this.props);
     }
     return (
-      <div className="">
-        <h2>This is the full recipe page</h2>
-        <Link to="/">Home</Link>
-        <Link to={`/dashboard/${this.props.match.params.partyName}`}>Event Dashboard</Link>
-        <Link to={`/recipegrid/${this.props.match.params.partyName}`}>Recipes</Link>
-        <h1>{this.state.recipeObject.strMeal}</h1>
-        <img src={this.state.recipeObject.strMealThumb} alt="" />
+      <div className=''>
+        <header>
+          <h1>Full Recipes</h1>
+        </header>
+        <div className='navContainer'>
+          <button onClick={this.sendToFirebase}>Save recipe</button>
+          <Link to='/' className='link'>
+            Home
+          </Link>
+          <Link
+            to={`/dashboard/${this.props.match.params.partyName}`}
+            className='link'>
+            Event Dashboard
+          </Link>
+          <Link
+            to={`/recipegrid/${this.props.match.params.partyName}`}
+            className='link'>
+            Recipes
+          </Link>
+        </div>
+        <div className='imageAndTitleContainer'>
+          <h2>{this.state.recipeObject.strMeal}</h2>
+          <img src={this.state.recipeObject.strMealThumb} alt='' />
+        </div>
         {this.state.finalIngredientsArray.map(item => {
           return <p>{item}</p>;
         })}
-        <button onClick={this.sendToFirebase}>Add Recipe to Event</button>
+        <p>{this.state.recipeObject.strInstructions}</p>
       </div>
     );
   }

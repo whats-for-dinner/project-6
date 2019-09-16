@@ -1,25 +1,38 @@
-// general layout of landing page
 .landingPage {
     header {
+
+        // general layout/positioning
         height: 50px;
         padding: 5px;
         display: flex;
         justify-content: center;
         align-items: center;
-        // box-shadow: 4px 4px 40px darken($black, 50%)
+
+        // styles and colors
+        background-color: $black;
+        color: white;
+        h1 {
+            color: white;
+            padding: 6px 20px;
+            font-family: $heading;
+            font-weight: 700;
+            font-size: 2.7rem;
+        }
     }
     ul {
         display: flex;
         justify-content: center;
     }
     .start {
-        // padding: 40px 0;
         background: $offWhite;
         background-image:url('../../images/heroImage.png/');
         background-size: contain;
         background-repeat: no-repeat;
         background-position: right;
-        height: 70vh;
+        height: 90vh;
+        @include mq-710 {
+            background-size: cover;
+        }
     }
     .startContainer {
         height: 100%;
@@ -33,29 +46,58 @@
             padding: 15px 0;
             h2 {
                 font-weight: 400;
+                @include mq-930 {
+                    background:white;
+                    padding: 10px;
+                }
             }
         }
     }
-
-}
-
-
-
-header {
-    background-color: $black;
-    color: white;
-    h1 {
-        font-family: $heading;
-        color: white;
-        // border: 1.6px solid white;
-        padding: 6px 20px;
-        // background: $white;
-        font-weight: 700;
-        font-size: 2.7rem;
+    .startForm {
+        @include mq-930 {
+            flex: 1 1 100%;
+        }
+        text-align: left;
+        input {
+            width: 350px;
+            height: 60px;
+            margin-right: 10px;
+            padding-left: 10px;
+            @include mq-930 {
+                flex: 1 1 100%;
+                margin-right: 0;
+            }
+        }
+        display: flex;
+        @include mq-930 {
+            display: block;
+            background: rgba(255, 255, 255, 0.705);
+        }
+        @include mq-930 {
+            p {
+                margin-top: 25px;
+            }
+        }
+        background: $white;
+        padding: 20px;
+        box-shadow: 3px 3px 10px darken($offWhite, 10%);
+    }
+    form {
+        display: flex;
+        flex-wrap:wrap;
+    }
+    .buttons {
+        display: flex;
+        @include mq-930 {
+            justify-content: space-between;
+            width: 100%;
+        }
     }
 }
 
-button {
+
+button,
+.skipToEvents {
     width: 150px;
     height: 60px;
     font-family: $body;
@@ -68,28 +110,28 @@ button {
 
 button.submit {
     margin-right: 5px;
-}
-
-button.skipToEvents {
-    margin-left: 5px;
-}
-
-
-.startForm {
-    // width: 100%;
-    text-align: left;
-    input {
-        width: 350px;
-        height: 60px;
-        margin-right: 10px;
-        padding-left: 10px;
+    @include mq-930 {
+        flex: 1 1 50%;
+        margin-top: 10px;
     }
-    display: flex;
-    background: $white;
-    padding: 20px;
-    box-shadow: 3px 3px 10px darken($offWhite, 10%)
+    // @include mq-930 {
+    //     margin-top: 10px;
+    // }
 }
 
+.skipToEvents {
+    text-align: center;
+    margin-left: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 3px;
+    @include mq-930 {
+        flex: 1 1 50%;
+        margin-top: 10px;
+    }
+    
+}
 
 .events {
     text-align: left;
@@ -107,20 +149,20 @@ button.skipToEvents {
     }
     ul {
         padding-top: 10px;
-        // display: flex;
-        // flex-direction: flex-start;
-        // justify-content: space-between;
-        // flex-wrap: wrap;
-        // align-content: flex-start;
         height: 100%;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(auto-fill, 200px);
         grid-gap: 30px 30px;
+        @include mq-930 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @include mq-500 {
+            grid-template-columns: repeat(1, 1fr);
+        }
     }
     li {
         flex: 0 0 32%;
-        // border: 1px solid $red;
         margin-top: 20px;
         height: 200px;
         padding: 30px;
