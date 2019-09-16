@@ -13,8 +13,6 @@ class App extends Component {
     this.state = ({
         events:[],
         createEvent: "",
-        currentEvent: "",
-
     })
 
   }
@@ -85,7 +83,6 @@ class App extends Component {
             return <Dashboard 
                     {...props}
                     event={this.state.events} 
-                    currentEvent={this.state.currentEvent}
           />}}/>
 
 
