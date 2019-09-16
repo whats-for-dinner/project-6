@@ -55,6 +55,7 @@ class RecipeGrid extends Component {
         </header>
         <form action=''>
           <select onChange={this.updateUserCategory} name='' id=''>
+            <option value=''>Please select a recipe category</option>
             <option value='Beef'>Beef</option>
             <option value='Chicken'>Chicken</option>
             <option value='Dessert'>Dessert</option>

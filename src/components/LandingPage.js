@@ -5,7 +5,19 @@ import firebase from '../firebase';
 
 
 
+
 const LandingPage = (props) => {
+
+    const checkName = () => {
+        const eventNames = []
+        (props.event).forEach((object)=> {
+            eventNames.push(object.name)
+        })
+        (eventNames.includes(`${props.createEventName}`))? true : false;
+        //forEach loop over props.event array and pull out each object.name value to create an array of eventNames
+        //if eventNames.includes(`${props.createEventName}`) then
+        //return true else return false
+    }
   
     return (
     
@@ -22,10 +34,15 @@ const LandingPage = (props) => {
                     <div className="startForm">
                         <form 
                         // onSubmit={this.pushToFirebase} 
-                        onSubmit={props.createEvent}
+                        onSubmit={
+                            checkName ? props.createEvent : <p>An event with that name already exists.  Please select a different name.</p>
+
+                            // run checkfunction.  if checkfunction is negative, run props.createEvent, otherwise return a message.
+                        }
                         action=""> 
+                            {props.errorMessage !=='' ? <p>{props.errorMessage}</p> : null}
                             <input onChange={props.getEventName} name="createEvent" className="createEvent" type="text" placeholder="enter your group name"/>
-                            <label htmlFor="createEvent" class="visuallyHidden">Enter your group name</label>
+                            <label htmlFor="createEvent" className="visuallyHidden">Enter your group name</label>
                             <button className="submit">
                                 Submit
                                 {/* This button creates a new event object in the events array AND links to event page. */}
@@ -52,9 +69,9 @@ const LandingPage = (props) => {
                             props.event.map((userEvents, eventIndex) => {
                                 return (
                                     // console.log(userEvents.eventName)
-                                    <li>
+                                    <li key={eventIndex} >
                                         <Link to={`/dashboard/${userEvents.eventName}`} 
-                                        key={eventIndex}>{userEvents.eventName}</Link>
+                                        >{userEvents.eventName}</Link>
                                     </li>
                                 )
                             }
