@@ -1,6 +1,5 @@
 import React,{Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
-import axios from 'axios';
 import firebase from '../firebase';
 
 class EventPage extends Component {
@@ -11,7 +10,6 @@ class EventPage extends Component {
             newGuest: "",
             guestList: [],
             recipes: [],
-            testIngredients: ["3 carrots","2 tomatoes"],
             currentGuest: "",
             currentIngredients: [],
         })
@@ -44,8 +42,9 @@ class EventPage extends Component {
         this.setState({
             [event.target.name]: event.target.value,
         })  
-    }
 
+    }
+    
     addGuest = (event) => {
         event.preventDefault();
         
@@ -57,11 +56,13 @@ class EventPage extends Component {
 
         this.setState({
             guestList: copyOfGuests,
+            newGuest: ''
         }, () => {
             const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests`);
 
             dbRef.update({
                 guestList: this.state.guestList,
+                
             })
         })
         
@@ -75,7 +76,14 @@ class EventPage extends Component {
 
         dbRef.update({
             ingredients: this.state.currentIngredients,
+        }, () => {
+            this.setState({
+                currentIngredients: [],
+            })
         })
+
+       
+        
 
     }
 
@@ -104,6 +112,8 @@ class EventPage extends Component {
   
     render(){
         // console.log(this.state.guestList)
+        const isEnabled = this.state.newGuest.length > 0;
+        
         return (
             
             <div className="dashBoard">
@@ -119,9 +129,10 @@ class EventPage extends Component {
                 <form onSubmit={this.addGuest} action="">
                     <label htmlFor="addGuest"></label>
                     {/* Below input adds guest to guest array on event object in Firebase. */}
-                    <input onChange={this.getNewGuest} name="newGuest" placeholder="add a new guest one at a time" type="text" id="addGuest"/>
+
+                    <input onChange={this.getNewGuest} name="newGuest" placeholder="add a new guest one at a time" value={this.state.newGuest} type="text" id="addGuest"/>
                     <label htmlFor="clickToSubmitGuest"></label>
-                    <button id="clickToSubmitGuest">Add guest</button>
+                    <button disabled={!isEnabled} id="clickToSubmitGuest">Add guest</button>
                 </form>
 
                 <section>
