@@ -66,19 +66,20 @@ class LandingPage extends Component {
                                 {this.props.errorMessage !=='' ? <p>{this.props.errorMessage}</p> : null}
                                 <input onChange={this.props.getEventName} name="createEvent" className="createEvent" type="text" placeholder="enter your group name"/>
                                 <label htmlFor="createEvent" className="visuallyHidden">Enter your group name</label>
-                                <button className="submit">
-                                    Submit
-                                    {/* This button creates a new event object in the events array AND links to event page. */}
-                                </button>      
+                                <div className="buttons">
+                                    <button className="submit">
+                                        Submit
+                                        {/* This button creates a new event object in the events array AND links to event page. */}
+                                    </button>      
+                                    <p>or</p>
+                                    <div className="skipToEvents"
+                                    onClick={this.moveToSection}>
+                                        <p>Skip</p>
+                                        {/* link to events (scroll) */}
+                                    </div>
+                                </div>
                             </form>
-                            {/* print error message if state is true */}
-                            <p>or</p>
-                            <button className="skipToEvents">
-                                Skip
-                                {/* link to events (scroll) */}
-                            </button>
-                            { this.state.userIsDuplicate? <p>User already exists</p> : null}
-
+                            {this.state.userIsDuplicate ? <p>User already exists</p> : null}
                         </div>
                     </div>
                 </section>

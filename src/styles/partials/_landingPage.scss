@@ -30,6 +30,9 @@
         background-repeat: no-repeat;
         background-position: right;
         height: 90vh;
+        @include mq-710 {
+            background-size: cover;
+        }
     }
     .startContainer {
         height: 100%;
@@ -43,12 +46,16 @@
             padding: 15px 0;
             h2 {
                 font-weight: 400;
+                @include mq-930 {
+                    background:white;
+                    padding: 10px;
+                }
             }
         }
     }
     .startForm {
         @include mq-930 {
-            flex: 1 0 100%;
+            flex: 1 1 100%;
         }
         text-align: left;
         input {
@@ -57,19 +64,40 @@
             margin-right: 10px;
             padding-left: 10px;
             @include mq-930 {
-                width: 100%;
+                flex: 1 1 100%;
+                margin-right: 0;
             }
         }
         display: flex;
+        @include mq-930 {
+            display: block;
+            background: rgba(255, 255, 255, 0.705);
+        }
+        @include mq-930 {
+            p {
+                margin-top: 25px;
+            }
+        }
         background: $white;
         padding: 20px;
         box-shadow: 3px 3px 10px darken($offWhite, 10%);
-        
+    }
+    form {
+        display: flex;
+        flex-wrap:wrap;
+    }
+    .buttons {
+        display: flex;
+        @include mq-930 {
+            justify-content: space-between;
+            width: 100%;
+        }
     }
 }
 
 
-button {
+button,
+.skipToEvents {
     width: 150px;
     height: 60px;
     font-family: $body;
@@ -82,15 +110,28 @@ button {
 
 button.submit {
     margin-right: 5px;
+    @include mq-930 {
+        flex: 1 1 50%;
+        margin-top: 10px;
+    }
+    // @include mq-930 {
+    //     margin-top: 10px;
+    // }
 }
 
-button.skipToEvents {
+.skipToEvents {
+    text-align: center;
     margin-left: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 3px;
+    @include mq-930 {
+        flex: 1 1 50%;
+        margin-top: 10px;
+    }
     
 }
-
-
-
 
 .events {
     text-align: left;
@@ -113,6 +154,12 @@ button.skipToEvents {
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(auto-fill, 200px);
         grid-gap: 30px 30px;
+        @include mq-930 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @include mq-500 {
+            grid-template-columns: repeat(1, 1fr);
+        }
     }
     li {
         flex: 0 0 32%;

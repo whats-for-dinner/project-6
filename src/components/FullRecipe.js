@@ -105,14 +105,29 @@ class FullRecipe extends React.Component {
       console.log(this.props);
     }
     return (
-      <div className="">
-        {/* <h2>This is the full recipe page</h2> */}
-        <button onClick={this.sendToFirebase}>Add this recipe</button>
-        <Link to="/">Home</Link>
-        <Link to={`/dashboard/${this.props.match.params.partyName}`}>Event Dashboard</Link>
-        <Link to={`/recipegrid/${this.props.match.params.partyName}`}>Recipes</Link>
-        <h1>{this.state.recipeObject.strMeal}</h1>
-        <img src={this.state.recipeObject.strMealThumb} alt="" />
+      <div className=''>
+        <header>
+          <h1>Full Recipes</h1>
+        </header>
+        <div className='navContainer'>
+          <Link to='/' className='link'>
+            Home
+          </Link>
+          <Link
+            to={`/dashboard/${this.props.match.params.partyName}`}
+            className='link'>
+            Event Dashboard
+          </Link>
+          <Link
+            to={`/recipegrid/${this.props.match.params.partyName}`}
+            className='link'>
+            Recipes
+          </Link>
+        </div>
+        <div className='imageAndTitleContainer'>
+          <h2>{this.state.recipeObject.strMeal}</h2>
+          <img src={this.state.recipeObject.strMealThumb} alt='' />
+        </div>
         {this.state.finalIngredientsArray.map(item => {
           return <p>{item}</p>;
         })}
