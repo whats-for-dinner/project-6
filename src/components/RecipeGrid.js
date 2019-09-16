@@ -60,6 +60,23 @@ class RecipeGrid extends Component {
           </Link>
         </div>
         <form action=''>
+<<<<<<< HEAD
+          <select onChange={this.updateUserCategory} name='' id=''>
+            <option value=''>Please select a recipe category</option>
+            <option value='Beef'>Beef</option>
+            <option value='Chicken'>Chicken</option>
+            <option value='Dessert'>Dessert</option>
+            <option value='Lamb'>Lamb</option>
+            <option value='Pasta'>Pasta</option>
+            <option value='Pork'>Pork</option>
+            <option value='Seafood'>Seafood</option>
+            <option value='Side'>Side</option>
+            <option value='Starter'>Starter</option>
+            <option value='Vegan'>Vegan</option>
+            <option value='Vegetarian'>Vegetarian</option>
+            <option value='Miscellaneous'>Miscellaneous</option>
+          </select>
+=======
           <div className='box'>
             <select onChange={this.updateUserCategory} name='' id=''>
               <option value='Beef'>Beef</option>
@@ -76,6 +93,7 @@ class RecipeGrid extends Component {
               <option value='Miscellaneous'>Miscellaneous</option>
             </select>
           </div>
+>>>>>>> test
         </form>
         <div>
           <ul className='recipePreviews'>
