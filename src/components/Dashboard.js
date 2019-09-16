@@ -109,6 +109,23 @@ class EventPage extends Component {
         })
     }
 
+    removeFromCart = (event) => {
+        event.preventDefault();
+
+        const ingredient = event.target.value
+        
+        const index = parseInt(ingredient, 10)
+    
+        const copyOfCart = this.state.currentIngredients
+    
+        copyOfCart.splice(index, 1)
+        
+        this.setState({
+            currentIngredients: copyOfCart,
+        })
+
+    }
+
   
     render(){
         // console.log(this.state.guestList)
@@ -142,7 +159,7 @@ class EventPage extends Component {
                         this.state.recipes.map((recipe, recipeIndex) => {
                             return (
                                 // console.log(recipe.recipe.strMeal)
-                                 <Link to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`}>
+                                 <Link key={recipeIndex}to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`}>
                                     
                                         <h3>{recipe.recipe.strMeal}</h3>
                                          <img src={recipe.recipe.strMealThumb} alt={recipe.recipe.strMeal}/>
@@ -195,7 +212,10 @@ class EventPage extends Component {
                                 // console.log(this.state.guestList)
                                 this.state.currentIngredients.map((ingredient, ingredientIndex) => {
                                     return (
-                                        <li key={ingredientIndex}>{ingredient}</li>
+                                        <div>
+                                        	<li key={ingredientIndex}>{ingredient}</li>
+                                            <button value={ingredientIndex} onClick={this.removeFromCart}>Remove</button>
+                                        </div>
                                     )
                                 })
                                 : console.log("fail")
