@@ -1,23 +1,29 @@
 import React,{Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
-import heroImage from '../images/heroImage.png'
+import heroImage from '../images/heroImage.png';
 import firebase from '../firebase';
 
 
 
 
-const LandingPage = (props) => {
 
-    const checkName = () => {
-        const eventNames = []
+const LandingPage = (props) => {
+    
+    const checkName = (e) => {
+        e.preventDefault();
+        const message = () => <p>:Telkj;</p>;
+        const eventNames = [];
+        console.log('checkname was fired');
+    
         (props.event).forEach((object)=> {
-            eventNames.push(object.name)
-        })
-        (eventNames.includes(`${props.createEventName}`))? true : false;
+            eventNames.push(object.eventName);
+        });
+        (eventNames.includes(`${props.createEventName}`))? message() : props.createEvent();
         //forEach loop over props.event array and pull out each object.name value to create an array of eventNames
         //if eventNames.includes(`${props.createEventName}`) then
         //return true else return false
     }
+    
   
     return (
     
@@ -35,7 +41,11 @@ const LandingPage = (props) => {
                         <form 
                         // onSubmit={this.pushToFirebase} 
                         onSubmit={
-                            checkName ? props.createEvent : <p>An event with that name already exists.  Please select a different name.</p>
+                            // console.log('I was clicked')
+                            checkName
+                            // ? props.createEvent : console.log('this is a duplicate event')
+                            
+                            // <p>An event with that name already exists.  Please select a different name.</p>
 
                             // run checkfunction.  if checkfunction is negative, run props.createEvent, otherwise return a message.
                         }
