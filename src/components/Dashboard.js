@@ -124,6 +124,13 @@ class EventPage extends Component {
         })
     }
 
+    deleteMeal = (mealId) => {
+        
+        const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/recipes`)
+
+        dbRef.child(mealId).remove();
+     
+    }
     
 
   
@@ -160,12 +167,14 @@ class EventPage extends Component {
                         this.state.recipes.map((recipe, recipeIndex) => {
                             return (
                                 // console.log(recipe.recipe.strMeal)
-                                 <Link key={recipeIndex}to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`}>
-                                    
-                                        <h3>{recipe.recipe.strMeal}</h3>
-                                         <img src={recipe.recipe.strMealThumb} alt={recipe.recipe.strMeal}/>
-                                    
-                                </Link>
+                                 <div>
+                                     <Link key={recipeIndex}to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`}>
+                                        
+                                            <h3>{recipe.recipe.strMeal}</h3>
+                                             <img src={recipe.recipe.strMealThumb} alt={recipe.recipe.strMeal}/>   
+                                    </Link>
+                                    <button onClick={() => this.deleteMeal(recipe.recipe.strMeal)}>delete</button>
+                                 </div>
                             )
                         })
                         : console.log("fail")}
