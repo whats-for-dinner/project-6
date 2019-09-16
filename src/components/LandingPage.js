@@ -16,6 +16,7 @@ class LandingPage extends Component {
     }
 
   
+<<<<<<< HEAD
     render(){
         return (
             <div className="landingPage">
@@ -52,6 +53,37 @@ class LandingPage extends Component {
                                 {/* link to events (scroll) */}
                             </button>
                         </div>
+=======
+    return (
+    
+        <div className="landingPage">
+            <header className="landingHeader">
+                <h1>What's For Dinner?</h1>
+
+            </header>
+            <section className="start">
+                <div className="wrapper startContainer">
+                    <div className="tagLine">
+                        <h2>We help you organize Dinner Parties</h2>
+                    </div>
+                    <div className="startForm">
+                        <form 
+                        // onSubmit={this.pushToFirebase} 
+                        onSubmit={props.createEvent}
+                        action=""> 
+                            <input onChange={props.getEventName} name="createEvent" className="createEvent" type="text" placeholder="enter your group name"/>
+                            <label htmlFor="createEvent" class="visuallyHidden">Enter your group name</label>
+                            <button className="submit">
+                                Submit
+                                {/* This button creates a new event object in the events array AND links to event page. */}
+                            </button>      
+                        </form>
+                        <p>or</p>
+                        <button className="skipToEvents">
+                            Skip
+                            {/* link to events (scroll) */}
+                        </button>
+>>>>>>> 7c82d2a8e8fc4f0a06230e4c15c792450239e3a9
                     </div>
                 </section>
                 <section className="events" name="events">

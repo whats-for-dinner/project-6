@@ -13,8 +13,6 @@ class App extends Component {
     this.state = ({
         events:[],
         createEvent: "",
-        currentEvent: "",
-
     })
 
   }
@@ -28,7 +26,7 @@ class App extends Component {
       const firebaseArray = Object.values(savedEvents);
 
       this.setState({
-        events: firebaseArray
+        events: firebaseArray ? firebaseArray : []
       });
     });
   }
@@ -62,26 +60,13 @@ class App extends Component {
           .ref(`events/${this.state.events[0].name}`);
         dbRef.set({
           eventName: this.state.events[0].name,
-          guests: [{ name: '', ingredients: [''] }],
-          recipes: [
-            {
-              recipe1: { title: '', img: '', ingredients: [''], directions: '' }
-            },
-            {
-              recipe: { title: '', img: '', ingredients: [''], directions: '' }
-            },
-            {
-              recipe3: { title: '', img: '', ingredients: [''], directions: '' }
-            }
-          ]
+          guests: {dummy: 0},
+          recipes: { dummy: 0 }
+        
         });
       }
     );
   };
-
-  // sendUserSelectionToState = (e, ing, img, title) => {
-  //   e.preventDefault();
-  // };
 
   render() {
     return (
@@ -98,7 +83,6 @@ class App extends Component {
             return <Dashboard 
                     {...props}
                     event={this.state.events} 
-                    currentEvent={this.state.currentEvent}
           />}}/>
 
 
