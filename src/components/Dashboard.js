@@ -71,7 +71,16 @@ class EventPage extends Component {
     // test to add ingredients to a guest
     addIngredient = (event) => {
         event.preventDefault();
-        // console.log("sasve")
+
+        // const savedIngredients = [this.state.guestList[this.state.currentGuest].ingredients]
+
+    
+        // use the id of the guest (currentGuest) to find if they have already got ingredients
+        // this.state.guestList[this.state.currentGuest].ingredients ? savedIngredients
+            
+        // guestList[this.state.currentGuest].ingredients ? 
+        // if they have ingredients(in firebase) spread that array and add the values to the currentIngredient array
+
         const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests/guestList/${this.state.currentGuest}`);
 
         dbRef.update({
@@ -88,9 +97,12 @@ class EventPage extends Component {
     currentGuest = (event) => {
         event.preventDefault();
         const string = event.target.value.toString()
+
+        const savedIngredients = this.state.guestList[string].ingredients ? [...this.state.guestList[string].ingredients] : null
         // console.log(string)
         this.setState({
             currentGuest: string,
+            currentIngredients: savedIngredients,
         })  
     }
 
@@ -102,7 +114,7 @@ class EventPage extends Component {
         const copyOfIngredients = [...this.state.currentIngredients]
 
         copyOfIngredients.push(name)
-
+        console.log("!!",copyOfIngredients)
         this.setState({
             currentIngredients: copyOfIngredients,
         })
