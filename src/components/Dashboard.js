@@ -27,12 +27,13 @@ class EventPage extends Component {
 
             const firebaseArray = Object.values(event);
        
-            const recipes = Object.values(firebaseArray[2])
-    
+            const fullRecipes = Object.values(firebaseArray[2])
+            fullRecipes.pop()
+            
             this.setState({
                 event: firebaseArray,
                 guestList: firebaseArray[1].guestList ? firebaseArray[1].guestList : [],
-                recipes: firebaseArray[2] ? recipes : [], 
+                recipes: firebaseArray[2] ? fullRecipes : [], 
             })
         });
         
@@ -69,7 +70,7 @@ class EventPage extends Component {
     // test to add ingredients to a guest
     addIngredient = (event) => {
         event.preventDefault();
-        console.log("sasve")
+        // console.log("sasve")
         const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests/guestList/${this.state.currentGuest}`);
 
         dbRef.update({
@@ -81,7 +82,7 @@ class EventPage extends Component {
     currentGuest = (event) => {
         event.preventDefault();
         const string = event.target.value.toString()
-        console.log(string)
+        // console.log(string)
         this.setState({
             currentGuest: string,
         })  
@@ -102,7 +103,7 @@ class EventPage extends Component {
 
   
     render(){
-        console.log(this.state.guestList)
+        // console.log(this.state.guestList)
         return (
             
             <div className="dashBoard">
@@ -122,6 +123,25 @@ class EventPage extends Component {
                     <label htmlFor="clickToSubmitGuest"></label>
                     <button id="clickToSubmitGuest">Add guest</button>
                 </form>
+
+                <section>
+                    
+
+                    {this.state.recipes ?
+                        this.state.recipes.map((recipe, recipeIndex) => {
+                            return (
+                                // console.log(recipe.recipe.strMeal)
+                                 <Link to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`}>
+                                    
+                                        <h3>{recipe.recipe.strMeal}</h3>
+                                         <img src={recipe.recipe.strMealThumb} alt={recipe.recipe.strMeal}/>
+                                    
+                                </Link>
+                            )
+                        })
+                        : console.log("fail")}
+                    
+                </section>
 
 
 
@@ -184,7 +204,7 @@ class EventPage extends Component {
                                 <div>
                                     <h3 key={guestIndex}>{guest.name}</h3>
                                     <ul>
-                                        {console.log("pritn", guest.ingredients)}
+                                        {/* {console.log("pritn", guest.ingredients)} */}
                                         {guest.ingredients ?
                                             // console.log(this.state.guestList)
                                             guest.ingredients.map((ingredient, index) => {
