@@ -76,15 +76,13 @@ class EventPage extends Component {
 
         dbRef.update({
             ingredients: this.state.currentIngredients,
-        }, () => {
+        }
+        , () => {
             this.setState({
                 currentIngredients: [],
             })
-        })
-
-       
-        
-
+        }
+        )
     }
 
     currentGuest = (event) => {
@@ -95,6 +93,7 @@ class EventPage extends Component {
             currentGuest: string,
         })  
     }
+
     selectIngredient = (event) => {
         event.preventDefault();
 
@@ -123,13 +122,15 @@ class EventPage extends Component {
         this.setState({
             currentIngredients: copyOfCart,
         })
-
     }
+
+    
 
   
     render(){
         // console.log(this.state.guestList)
         const isEnabled = this.state.newGuest.length > 0;
+        const cartIsEnabled = this.state.currentGuest !== "" && this.state.currentIngredients !== []
         
         return (
             
@@ -223,7 +224,8 @@ class EventPage extends Component {
                         </ul>    
                         </div>
                         {/* button pushes to firebase */}
-                        <button onClick={this.addIngredient}>Save</button>
+                        <button disabled={!cartIsEnabled} onClick={this.addIngredient}>Save</button>
+                        {!cartIsEnabled && <p>Please check you have selected a guest and some ingredients</p>}
                     </form>    
                 </section>
 
