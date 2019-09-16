@@ -48,12 +48,19 @@ class RecipeGrid extends Component {
   render() {
     return (
       <div className=''>
-        <Link to='/'>Home</Link>
-        <Link to='/event/:'>Event Page</Link>
         <header>
           <h1>Find a recipe</h1>
         </header>
+        <div className='navContainer'>
+          <Link to='/' className='link'>
+            Home
+          </Link>
+          <Link to='/event/:' className='link'>
+            Event Page
+          </Link>
+        </div>
         <form action=''>
+<<<<<<< HEAD
           <select onChange={this.updateUserCategory} name='' id=''>
             <option value=''>Please select a recipe category</option>
             <option value='Beef'>Beef</option>
@@ -69,6 +76,24 @@ class RecipeGrid extends Component {
             <option value='Vegetarian'>Vegetarian</option>
             <option value='Miscellaneous'>Miscellaneous</option>
           </select>
+=======
+          <div className='box'>
+            <select onChange={this.updateUserCategory} name='' id=''>
+              <option value='Beef'>Beef</option>
+              <option value='Chicken'>Chicken</option>
+              <option value='Dessert'>Dessert</option>
+              <option value='Lamb'>Lamb</option>
+              <option value='Pasta'>Pasta</option>
+              <option value='Pork'>Pork</option>
+              <option value='Seafood'>Seafood</option>
+              <option value='Side'>Side</option>
+              <option value='Starter'>Starter</option>
+              <option value='Vegan'>Vegan</option>
+              <option value='Vegetarian'>Vegetarian</option>
+              <option value='Miscellaneous'>Miscellaneous</option>
+            </select>
+          </div>
+>>>>>>> test
         </form>
         <div>
           <ul className='recipePreviews'>

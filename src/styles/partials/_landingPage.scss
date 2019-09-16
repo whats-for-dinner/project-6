@@ -1,25 +1,35 @@
-// general layout of landing page
 .landingPage {
     header {
+
+        // general layout/positioning
         height: 50px;
         padding: 5px;
         display: flex;
         justify-content: center;
         align-items: center;
-        // box-shadow: 4px 4px 40px darken($black, 50%)
+
+        // styles and colors
+        background-color: $black;
+        color: white;
+        h1 {
+            color: white;
+            padding: 6px 20px;
+            font-family: $heading;
+            font-weight: 700;
+            font-size: 2.7rem;
+        }
     }
     ul {
         display: flex;
         justify-content: center;
     }
     .start {
-        // padding: 40px 0;
         background: $offWhite;
         background-image:url('../../images/heroImage.png/');
         background-size: contain;
         background-repeat: no-repeat;
         background-position: right;
-        height: 70vh;
+        height: 90vh;
     }
     .startContainer {
         height: 100%;
@@ -36,24 +46,28 @@
             }
         }
     }
-
-}
-
-
-
-header {
-    background-color: $black;
-    color: white;
-    h1 {
-        font-family: $heading;
-        color: white;
-        // border: 1.6px solid white;
-        padding: 6px 20px;
-        // background: $white;
-        font-weight: 700;
-        font-size: 2.7rem;
+    .startForm {
+        @include mq-930 {
+            flex: 1 0 100%;
+        }
+        text-align: left;
+        input {
+            width: 350px;
+            height: 60px;
+            margin-right: 10px;
+            padding-left: 10px;
+            @include mq-930 {
+                width: 100%;
+            }
+        }
+        display: flex;
+        background: $white;
+        padding: 20px;
+        box-shadow: 3px 3px 10px darken($offWhite, 10%);
+        
     }
 }
+
 
 button {
     width: 150px;
@@ -72,23 +86,10 @@ button.submit {
 
 button.skipToEvents {
     margin-left: 5px;
+    
 }
 
 
-.startForm {
-    // width: 100%;
-    text-align: left;
-    input {
-        width: 350px;
-        height: 60px;
-        margin-right: 10px;
-        padding-left: 10px;
-    }
-    display: flex;
-    background: $white;
-    padding: 20px;
-    box-shadow: 3px 3px 10px darken($offWhite, 10%)
-}
 
 
 .events {
@@ -107,11 +108,6 @@ button.skipToEvents {
     }
     ul {
         padding-top: 10px;
-        // display: flex;
-        // flex-direction: flex-start;
-        // justify-content: space-between;
-        // flex-wrap: wrap;
-        // align-content: flex-start;
         height: 100%;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -120,7 +116,6 @@ button.skipToEvents {
     }
     li {
         flex: 0 0 32%;
-        // border: 1px solid $red;
         margin-top: 20px;
         height: 200px;
         padding: 30px;
