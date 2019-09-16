@@ -13,6 +13,7 @@ class App extends Component {
     this.state = ({
         events:[],
         createEvent: "",
+        errorMessage:""
     })
 
   }
@@ -40,39 +41,48 @@ class App extends Component {
 
 
   // this function runs on Submit
-  createEvent = event => {
-    event.preventDefault();
+  createEvent = () => {
+    // event.preventDefault();
+
+    if(this.state.createEvent !== "") {
     // taking the events array in state and copying it
-    const copyOfEvents = [...this.state.events];
-    // this is putting the input we saved in state into an object
-    const makeObject = { name: this.state.createEvent };
-    // we are pushing the object to the copy of the array in state
-    copyOfEvents.unshift(makeObject);
-    // updating the state of events to the new version of the array
-    this.setState(
-      {
-        events: copyOfEvents
-      },
-      () => {
-        // sending new event object to firebase - asynchronous callback
-        const dbRef = firebase
-          .database()
-          .ref(`events/${this.state.events[0].name}`);
-        dbRef.set({
-          eventName: this.state.events[0].name,
-          guests: {dummy: 0},
-          recipes: { dummy: 0 }
-        
-        });
-      }
-    );
+      const copyOfEvents = [...this.state.events];
+      // this is putting the input we saved in state into an object
+      const makeObject = { name: this.state.createEvent };
+      // we are pushing the object to the copy of the array in state
+      copyOfEvents.unshift(makeObject);
+      // updating the state of events to the new version of the array
+      this.setState(
+        {
+          events: copyOfEvents
+        },
+        () => {
+          // sending new event object to firebase - asynchronous callback
+          const dbRef = firebase
+            .database()
+            .ref(`events/${this.state.events[0].name}`);
+          dbRef.set({
+            eventName: this.state.events[0].name,
+            guests: {dummy: 0},
+            recipes: { dummy: 0 }
+          
+          });
+        }
+      );
+    } 
+    else 
+    {
+      this.setState({
+        errorMessage: "Please enter a name for your event before clicking submit"
+      })
+    }
   };
 
   render() {
     return (
       <Router>
         <div className="App">
-          <Route exact path="/" render={() =>{return <LandingPage event={this.state.events} getEventName={this.getEventName} createEvent={this.createEvent} 
+          <Route exact path="/" render={() =>{return <LandingPage event={this.state.events} getEventName={this.getEventName} createEvent={this.createEvent} errorMessage={this.state.errorMessage} errorMessage2={this.state.errorMessage2} createEventName={this.state.createEvent} 
           />}}/>
           {/* <Route path="/contact" render={() =>{return <Contact name="colin" />}}/> */}
           {/* the colon below tells router to expect a parameter. This value is going to be passed in later. */}

@@ -1,11 +1,37 @@
 import React,{Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import heroImage from '../images/heroImage.png';
 import firebase from '../firebase';
 import {Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
 
 
 
+
+
 class LandingPage extends Component {
+    constructor() {
+        super() 
+        this.state = {
+            userIsDuplicate: false,
+        }
+    }
+    
+    checkName = (e) => {
+        e.preventDefault();
+        const message = () => this.setState
+        const eventNames = [];
+    
+        (this.props.event).forEach((object)=> {
+            eventNames.push(object.eventName);
+        });
+        // returns true if there is a duplicate
+        eventNames.includes(`${this.props.createEventName}`)? this.setState({
+            userIsDuplicate: !this.state.userIsDuplicate
+        }) : this.props.createEvent();
+        //forEach loop over props.event array and pull out each object.name value to create an array of eventNames
+        //if eventNames.includes(`${props.createEventName}`) then
+        //return true else return false
+    }
 
     moveToSection = () => {
         scroller.scrollTo('events', {
@@ -15,7 +41,6 @@ class LandingPage extends Component {
         });
     }
 
-  
     render(){
         return (
             <div className="landingPage">
@@ -36,10 +61,11 @@ class LandingPage extends Component {
                         <div className="startForm">
                             <form 
                             // onSubmit={this.pushToFirebase} 
-                            onSubmit={this.props.createEvent}
+                            onSubmit={this.checkName}
                             action=""> 
+                                {this.props.errorMessage !=='' ? <p>{this.props.errorMessage}</p> : null}
                                 <input onChange={this.props.getEventName} name="createEvent" className="createEvent" type="text" placeholder="enter your group name"/>
-                                <label htmlFor="createEvent" class="visuallyHidden">Enter your group name</label>
+                                <label htmlFor="createEvent" className="visuallyHidden">Enter your group name</label>
                                 <div className="buttons">
                                     <button className="submit">
                                         Submit
@@ -53,10 +79,11 @@ class LandingPage extends Component {
                                     </div>
                                 </div>
                             </form>
+                            {this.state.userIsDuplicate ? <p>User already exists</p> : null}
                         </div>
                     </div>
                 </section>
-                <section className="events" name="events">
+                <section className="events">
                     <div className="wrapper">
                         <div>
                             <h2>Events</h2>
@@ -64,14 +91,14 @@ class LandingPage extends Component {
                         </div>
                         <ul>
                             {/* map through this.state.events and return events to page as <li> elements in <Link>s. */}
-                            {/* {this.props["event"] ?console.logthis.(props["event"][0]):console.log('null')} */}
+                            {/* {props["event"] ?console.log(props["event"][0]):console.log('null')} */}
                             {this.props.event?
                                 this.props.event.map((userEvents, eventIndex) => {
                                     return (
                                         // console.log(userEvents.eventName)
-                                        <li>
+                                        <li key={eventIndex} >
                                             <Link to={`/dashboard/${userEvents.eventName}`} 
-                                            key={eventIndex}>{userEvents.eventName}</Link>
+                                            >{userEvents.eventName}</Link>
                                         </li>
                                     )
                                 }
@@ -80,9 +107,8 @@ class LandingPage extends Component {
                     </div>
                 </section>
             </div>
-        
-        );
-    }
+        )
+   };  
   
 }
 export default LandingPage;
