@@ -28,8 +28,9 @@ const LandingPage = (props) => {
                         <form 
                         // onSubmit={this.pushToFirebase} 
                         onSubmit={props.createEvent}
-                        action="">
+                        action=""> 
                             <input onChange={props.getEventName} name="createEvent" className="createEvent" type="text" placeholder="enter your group name"/>
+                            <label htmlFor="createEvent" class="visuallyHidden">Enter your group name</label>
                             <button className="submit">
                                 Submit
                                 {/* This button creates a new event object in the events array AND links to event page. */}
