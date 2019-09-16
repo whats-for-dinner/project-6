@@ -27,11 +27,13 @@ a {
 }
 
 li {
-    padding-left: none;
     list-style: none;
 }
 
-h1, 
+h1,
+h2,
+h3, 
 ul {
     margin: 0;
+    padding: 0;
 }
