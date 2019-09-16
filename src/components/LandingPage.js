@@ -40,17 +40,19 @@ class LandingPage extends Component {
                             action=""> 
                                 <input onChange={this.props.getEventName} name="createEvent" className="createEvent" type="text" placeholder="enter your group name"/>
                                 <label htmlFor="createEvent" class="visuallyHidden">Enter your group name</label>
-                                <button className="submit">
-                                    Submit
-                                    {/* This button creates a new event object in the events array AND links to event page. */}
-                                </button>      
+                                <div className="buttons">
+                                    <button className="submit">
+                                        Submit
+                                        {/* This button creates a new event object in the events array AND links to event page. */}
+                                    </button>      
+                                    <p>or</p>
+                                    <div className="skipToEvents"
+                                    onClick={this.moveToSection}>
+                                        <p>Skip</p>
+                                        {/* link to events (scroll) */}
+                                    </div>
+                                </div>
                             </form>
-                            <p>or</p>
-                            <button className="skipToEvents"
-                            onClick={this.moveToSection}>
-                                Skip
-                                {/* link to events (scroll) */}
-                            </button>
                         </div>
                     </div>
                 </section>
