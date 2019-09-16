@@ -1,0 +1,149 @@
+// general layout of landing page
+.landingPage {
+    header {
+        height: 50px;
+        padding: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // box-shadow: 4px 4px 40px darken($black, 50%)
+    }
+    ul {
+        display: flex;
+        justify-content: center;
+    }
+    .start {
+        // padding: 40px 0;
+        background: $offWhite;
+        background-image:url('../../images/heroImage.png/');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: right;
+        height: 70vh;
+    }
+    .startContainer {
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        align-content: center;
+        .tagLine {
+            flex: 1 0 100%;
+            text-align: left;
+            padding: 15px 0;
+            h2 {
+                font-weight: 400;
+            }
+        }
+    }
+
+}
+
+
+
+header {
+    background-color: $black;
+    color: white;
+    h1 {
+        font-family: $heading;
+        color: white;
+        // border: 1.6px solid white;
+        padding: 6px 20px;
+        // background: $white;
+        font-weight: 700;
+        font-size: 2.7rem;
+    }
+}
+
+button {
+    width: 150px;
+    height: 60px;
+    font-family: $body;
+    font-weight: 600;
+    background: $yellow;
+    text-transform: uppercase;
+    border: none;
+    box-shadow: 1px 1px 2px $black;
+}
+
+button.submit {
+    margin-right: 5px;
+}
+
+button.skipToEvents {
+    margin-left: 5px;
+}
+
+
+.startForm {
+    // width: 100%;
+    text-align: left;
+    input {
+        width: 350px;
+        height: 60px;
+        margin-right: 10px;
+        padding-left: 10px;
+    }
+    display: flex;
+    background: $white;
+    padding: 20px;
+    box-shadow: 3px 3px 10px darken($offWhite, 10%)
+}
+
+
+.events {
+    text-align: left;
+    position: relative;
+    background: $offWhite;
+    .wrapper {
+        height: 100%;
+    }
+    h3 {
+        padding: 60px 0 0;
+        font-weight: 400;
+        letter-spacing: 1.5px;
+        position: relative;
+        z-index: 20;
+    }
+    ul {
+        padding-top: 10px;
+        // display: flex;
+        // flex-direction: flex-start;
+        // justify-content: space-between;
+        // flex-wrap: wrap;
+        // align-content: flex-start;
+        height: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(auto-fill, 200px);
+        grid-gap: 30px 30px;
+    }
+    li {
+        flex: 0 0 32%;
+        // border: 1px solid $red;
+        margin-top: 20px;
+        height: 200px;
+        padding: 30px;
+        background: white;
+        font-weight: 700;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &:hover {
+            border: 2px solid $red;
+        }
+    }
+    h2 {
+        position: absolute;
+        font-size: 9rem;
+        z-index: 10;
+        color: darken($offWhite, 5%);
+        letter-spacing: 1.5px;
+    }
+    a {
+        background: $yellow;
+        padding: 5px 10px;
+    }
+
+}

@@ -10,7 +10,10 @@ class EventPage extends Component {
             event: [],
             newGuest: "",
             guestList: [],
+            recipes: [],
             testIngredients: ["3 carrots","2 tomatoes"],
+            currentGuest: "",
+            currentIngredients: [],
         })
     }
 
@@ -21,12 +24,15 @@ class EventPage extends Component {
 
         dbRef.on('value', (data) => {
             const event = data.val();
-            const firebaseArray = Object.values(event);
 
+            const firebaseArray = Object.values(event);
+       
+            const recipes = Object.values(firebaseArray[2])
+    
             this.setState({
                 event: firebaseArray,
-                guestList: firebaseArray[1].guestList ? firebaseArray[1].guestList : []
-                // guestList: firebaseArray[1].guestList
+                guestList: firebaseArray[1].guestList ? firebaseArray[1].guestList : [],
+                recipes: firebaseArray[2] ? recipes : [], 
             })
         });
         
@@ -63,13 +69,35 @@ class EventPage extends Component {
     // test to add ingredients to a guest
     addIngredient = (event) => {
         event.preventDefault();
-
-        const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests/guestList/1`);
+        console.log("sasve")
+        const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests/guestList/${this.state.currentGuest}`);
 
         dbRef.update({
-            ingredients: this.state.testIngredients,
+            ingredients: this.state.currentIngredients,
         })
 
+    }
+
+    currentGuest = (event) => {
+        event.preventDefault();
+        const string = event.target.value.toString()
+        console.log(string)
+        this.setState({
+            currentGuest: string,
+        })  
+    }
+    selectIngredient = (event) => {
+        event.preventDefault();
+
+        const name = event.target.value
+
+        const copyOfIngredients = [...this.state.currentIngredients]
+
+        copyOfIngredients.push(name)
+
+        this.setState({
+            currentIngredients: copyOfIngredients,
+        })
     }
 
   
@@ -84,9 +112,9 @@ class EventPage extends Component {
                 </button> */}
                 <Link to="/">Home</Link>
                 {/* Below link takes user to page where they select recipes */}
-                <Link to="/recipegrid/:">Recipes</Link>
+                <Link to={`/recipegrid/${this.props.match.params.partyName}`}>Find Recipes</Link>
                 {/* Below link is conditionally rendered if recipe exists.  Will contain an image that is determined by recipes in state. */}
-                <Link to="/fullrecipe/:">Full Recipe</Link>
+                {/* <Link to="/fullrecipe/:">Full Recipe</Link> */}
                 <form onSubmit={this.addGuest} action="">
                     <label htmlFor="addGuest"></label>
                     {/* Below input adds guest to guest array on event object in Firebase. */}
@@ -95,18 +123,57 @@ class EventPage extends Component {
                     <button id="clickToSubmitGuest">Add guest</button>
                 </form>
 
-                <section className="ingredients">
-                    {this.state.testIngredients ?
-                        this.state.testIngredients.map((ingredient, index) => {
-                            return (
-                                <div>
-                                    <p key={index}>{ingredient}</p>
-                                </div>
-                            )
-                        })
-                        : console.log("fail")}
 
-                        <button onClick={this.addIngredient}>test</button>
+
+                <section className="ingredients">
+                    <ul>
+                        {this.state.recipes ?
+                            this.state.recipes.map((recipe, recipeIndex) => {
+                                return recipe.ingredients ? (recipe.ingredients).map((ingredient, index) => {
+                                    return <li key={recipeIndex + index}><button onClick={this.selectIngredient} value={ingredient}>{ingredient}</button></li>
+                                }) : console.log("no")
+                    
+                            })
+                            : console.log("fail")}
+                    </ul>
+                    {/* <button onClick={this.addIngredient}>test</button> */}
+                </section>
+
+
+
+
+                <section className="basket">
+                    <form action="">
+                        <select onChange={this.currentGuest}name="" id="">
+                            {/* map users and save the value of the index number */}
+                            <option value="">Please Select a Guest</option>
+                            {this.state.guestList ?
+                                // console.log(this.state.guestList)
+                                this.state.guestList.map((guest, guestIndex) => {
+                                    return (
+                                        <option name="currentGuest" value={guestIndex}>{guest.name}</option>
+                                    )
+                                })
+                                : console.log("fail")
+                            }
+                        </select>
+                        <div>
+                        {/* render array of choices */}
+                        <ul>
+                            {this.state.currentIngredients ?
+                                // console.log(this.state.guestList)
+                                this.state.currentIngredients.map((ingredient, ingredientIndex) => {
+                                    return (
+                                        <li key={ingredientIndex}>{ingredient}</li>
+                                    )
+                                })
+                                : console.log("fail")
+                            }
+                        </ul>    
+                        </div>
+                        {/* button pushes to firebase */}
+                        <button onClick={this.addIngredient}>Save</button>
+                    </form>    
                 </section>
 
                 <section className="guests">
@@ -116,7 +183,19 @@ class EventPage extends Component {
                             return (
                                 <div>
                                     <h3 key={guestIndex}>{guest.name}</h3>
-                                    
+                                    <ul>
+                                        {console.log("pritn", guest.ingredients)}
+                                        {guest.ingredients ?
+                                            // console.log(this.state.guestList)
+                                            guest.ingredients.map((ingredient, index) => {
+                                                return (
+                                                    // console.log("index.ingred",guest.ingredients)
+                                                    < li key = { index } > {ingredient}</li>
+                                                )
+                                            })
+                                            : console.log("fail")
+                                        } 
+                                    </ul>
                                 </div> 
                             )
                         })

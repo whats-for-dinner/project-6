@@ -13,8 +13,6 @@ class App extends Component {
     this.state = ({
         events:[],
         createEvent: "",
-        currentEvent: "",
-
     })
 
   }
@@ -28,7 +26,7 @@ class App extends Component {
       const firebaseArray = Object.values(savedEvents);
 
       this.setState({
-        events: firebaseArray
+        events: firebaseArray ? firebaseArray : []
       });
     });
   }
@@ -62,25 +60,12 @@ class App extends Component {
           .ref(`events/${this.state.events[0].name}`);
         dbRef.set({
           eventName: this.state.events[0].name,
-          guests: [{ name: '', ingredients: [''] }],
-          recipes: [
-            {
-              recipe1: { title: '', img: '', ingredients: [''], directions: '' }
-            },
-            {
-              recipe: { title: '', img: '', ingredients: [''], directions: '' }
-            },
-            {
-              recipe3: { title: '', img: '', ingredients: [''], directions: '' }
-            }
-          ]
+          guests: [""],
+          recipes: [""]
+        
         });
       }
     );
-  };
-
-  sendUserSelectionToState = (e, ing, img, title) => {
-    e.preventDefault();
   };
 
   render() {
@@ -98,14 +83,13 @@ class App extends Component {
             return <Dashboard 
                     {...props}
                     event={this.state.events} 
-                    currentEvent={this.state.currentEvent}
           />}}/>
 
 
-          <Route path="/recipegrid/:" component={RecipeGrid} />
+          <Route path="/recipegrid/:partyName" component={RecipeGrid} />
           {/* the below Route is saying: whenever the URL reads fullrecipe/(something),render the FullRecipeComponent.  But so that we can use info from that URL *in* the FullRecipe component, include a parameter so that that parameter can be accessed in the component.  In this case the 'idMeal' parameter tells the FullRecipe component where to look for props.match.params.idMeal.  It will look for this value by looking to the URL.  And since the URL is an ID number, it will use this ID to do its Axios call. */}
           <Route
-            path="/fullrecipe/:idMeal"
+            path="/fullrecipe/:idMeal/:partyName"
             render={({ match }) => {
               return (
                 <FullRecipe
