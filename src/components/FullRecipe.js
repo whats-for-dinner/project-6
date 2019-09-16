@@ -110,6 +110,7 @@ class FullRecipe extends React.Component {
           <h1>Full Recipes</h1>
         </header>
         <div className='navContainer'>
+          <button onClick={this.sendToFirebase}>Save recipe</button>
           <Link to='/' className='link'>
             Home
           </Link>
