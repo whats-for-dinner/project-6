@@ -164,7 +164,7 @@ class EventPage extends Component {
   removeFromCart = event => {
     event.preventDefault();
     // value comes out as a string of the index
-    const ingredient = event.target.value;
+    const ingredient = event.target.name;
     // make it a number
     const index = parseInt(ingredient, 10);
 
@@ -172,8 +172,18 @@ class EventPage extends Component {
     // remove that item from the "cart"
     copyOfCart.splice(index, 1);
 
+    const ingredientObject = {
+      item: event.target.value,
+      recipeNumber: event.target.id
+    };
+    
+    const copyOfIngredients = [...this.state.remainingIngredients]
+
+    copyOfIngredients.push(ingredientObject)
+
     this.setState({
-      currentIngredients: copyOfCart
+      currentIngredients: copyOfCart,
+      remainingIngredients: copyOfIngredients
     });
   };
 
@@ -303,7 +313,9 @@ class EventPage extends Component {
                             <div>
                               <li key={ingredientIndex}>{ingredient.item}</li>
                               <button
-                                value={ingredientIndex}
+                                name={ingredientIndex}
+                                value={ingredient.item}
+                                id={ingredient.recipeNumber}
                                 onClick={this.removeFromCart}
                               >
                                 Remove
