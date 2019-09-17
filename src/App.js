@@ -66,7 +66,6 @@ class App extends Component {
             guests: {dummy: 0},
             recipes: { dummy: 0 },
             unassignedIngredients: ["dummy"]
-          
           });
         }
       );
