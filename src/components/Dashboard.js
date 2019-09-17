@@ -71,7 +71,16 @@ class EventPage extends Component {
     // test to add ingredients to a guest
     addIngredient = (event) => {
         event.preventDefault();
-        // console.log("sasve")
+
+        // const savedIngredients = [this.state.guestList[this.state.currentGuest].ingredients]
+
+    
+        // use the id of the guest (currentGuest) to find if they have already got ingredients
+        // this.state.guestList[this.state.currentGuest].ingredients ? savedIngredients
+            
+        // guestList[this.state.currentGuest].ingredients ? 
+        // if they have ingredients(in firebase) spread that array and add the values to the currentIngredient array
+
         const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests/guestList/${this.state.currentGuest}`);
 
         dbRef.update({
@@ -88,9 +97,12 @@ class EventPage extends Component {
     currentGuest = (event) => {
         event.preventDefault();
         const string = event.target.value.toString()
+
+        const savedIngredients = this.state.guestList[string].ingredients ? [...this.state.guestList[string].ingredients] : null
         // console.log(string)
         this.setState({
             currentGuest: string,
+            currentIngredients: savedIngredients,
         })  
     }
 
@@ -103,6 +115,9 @@ class EventPage extends Component {
 
         copyOfIngredients.push(name)
 
+        console.log("!!",copyOfIngredients)
+
+        
         this.setState({
             currentIngredients: copyOfIngredients,
         })
@@ -124,6 +139,13 @@ class EventPage extends Component {
         })
     }
 
+    deleteMeal = (mealId) => {
+        
+        const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/recipes`)
+
+        dbRef.child(mealId).remove();
+     
+    }
     
 
   
@@ -160,12 +182,14 @@ class EventPage extends Component {
                         this.state.recipes.map((recipe, recipeIndex) => {
                             return (
                                 // console.log(recipe.recipe.strMeal)
-                                 <Link key={recipeIndex}to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`}>
-                                    
-                                        <h3>{recipe.recipe.strMeal}</h3>
-                                         <img src={recipe.recipe.strMealThumb} alt={recipe.recipe.strMeal}/>
-                                    
-                                </Link>
+                                 <div>
+                                     <Link key={recipeIndex}to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`}>
+                                        
+                                            <h3>{recipe.recipe.strMeal}</h3>
+                                             <img src={recipe.recipe.strMealThumb} alt={recipe.recipe.strMeal}/>   
+                                    </Link>
+                                    <button onClick={() => this.deleteMeal(recipe.recipe.strMeal)}>delete</button>
+                                 </div>
                             )
                         })
                         : console.log("fail")}
