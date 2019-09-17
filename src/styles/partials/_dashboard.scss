@@ -274,4 +274,28 @@
          cursor: pointer;
         }
     }
+    .stepThree {
+        width: 80%;
+        margin: 50px auto 50px auto;
+        display:flex;
+        .guestIngredientContainer {
+            width: 300px;
+            min-height: 250px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+            margin-left: 30px;
+            h3 {
+                background: $red;
+                padding: 20px;
+            }
+            ul {
+                margin-top: 20px;
+            }
+        }
+    }
+    .whatsInYourBasket {
+        text-transform: uppercase;
+        font-size: 3rem;
+        font-weight: 700;
+    }
 }

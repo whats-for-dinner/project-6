@@ -334,24 +334,30 @@ class EventPage extends Component {
           </section>
         </div>
 
-        <section className="guests stepThree">
-          {this.state.guestList
-            ? this.state.guestList.map((guest, guestIndex) => {
-                return (
-                  <div>
-                    <h3 key={guestIndex}>{guest.name}</h3>
-                    <ul>
-                      {guest.ingredients
-                        ? guest.ingredients.map((ingredient, index) => {
-                            return <li key={index}> {ingredient}</li>;
-                          })
-                        : console.log("fail")}
-                    </ul>
-                  </div>
-                );
-              })
-            : console.log("fail")}
+        <section className="guests">
+          <p className="whatsInYourBasket">What's in your basket?</p>
+          <div className="stepThree">
+            {this.state.guestList
+              ? this.state.guestList.map((guest, guestIndex) => {
+                  return (
+                    <div className="guestIngredientContainer">
+                      <h3 key={guestIndex}>{guest.name}</h3>
+                      <ul>
+                        {guest.ingredients
+                          ? guest.ingredients.map((ingredient, index) => {
+                              return <li key={index}> {ingredient}</li>;
+                            })
+                          : console.log("fail")}
+                      </ul>
+                    </div>
+                  );
+                })
+              : console.log("fail")}
+          </div>
         </section>
+        <footer>
+          <p> © 2019 What's for dinner? </p>
+        </footer>
       </div>
     );
   }
