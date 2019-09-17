@@ -1,9 +1,157 @@
 // Image style
 
-.imageAndTitleContainer {
+.titleAndButton {
+  position: relative;
   h2 {
     font-weight: 400;
-    padding: 10px 0px;
+    padding: 25px 0px;
     background: $yellow;
   }
+  button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
 }
+
+
+
+.titleAndPicture {
+  margin-top: 70px;
+  display: flex;
+  justify-content: center;
+  @include mq-710 {
+    flex-direction: column-reverse;
+  }
+  .imageContainer {
+    flex: 0 1 25%;
+    display: flex;
+    align-items: center;
+    margin-right: 50px;
+    img {
+      width: 100%
+    }
+    @include mq-1230 {
+      flex: 0 1 35%;
+    }
+    @include mq-1050 {
+      flex: 0 1 45%;
+    }
+    @include mq-710 {
+      margin-right: 0;
+      width: 80%;
+      margin: 0 auto;
+    }
+  }
+  .recipeTitle {
+    flex: 0 1 25%;
+    font-family: $heading;
+    font-weight: 700;
+    text-align: left;
+    margin-left: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    @include mq-1050 {
+      flex: 0 1 35%;
+      margin-left: 20px;
+    }
+    @include mq-710 {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: center;
+      margin-left: 0;
+      margin-bottom: 30px;
+    }
+    @include mq-710 {
+      flex-direction: column;
+      margin-left: 50px;
+      width: 80%;
+      align-items: flex-start;
+    }
+    @include mq-500 {
+      button {
+        width: 50%;
+      }
+    }
+    h2 {
+      font-size: 5.5rem;
+      @include mq-710 {
+        flex: 0 1 50%;
+      }
+    }
+  }
+}
+
+.recipeContainer {
+  margin-top: 70px;
+  display: flex;
+  justify-content: center;
+  @include mq-710 {
+    flex-direction: column;
+    margin-top: 30px;
+  }
+  .ingredientList {
+    flex: 0 1 50%;
+    text-align: right;
+    margin-right: 50px;
+    p {
+      margin: 9px;
+    }
+    h3 {
+      margin-bottom: 20px;
+    }
+    @include mq-710 {
+      text-align: center;
+      margin: 0;
+    }
+  }
+  .recipeInstructions {
+    flex: 0 1 50%;
+    margin-left: 50px;
+    text-align: left;
+    line-height: 28px;
+    @include mq-710 {
+      margin-top: 30px;
+    }
+    .instruction {
+      width: 70%;
+      @include mq-1050 {
+        width: 90%;
+      }
+    }
+    
+  }
+}
+
+
+
+.fullRecipe {
+  .mainHeader {
+    height: 59px;
+    padding: 5px;
+    background-color: $black;
+    color: white;
+    position: relative;
+    h1 {
+      text-align: center;
+      font-family: $heading;
+      font-weight: 700;
+      font-size: 3.9rem;
+    }
+    nav {
+      position: absolute;
+      right: 10px;
+      top: 15px;
+      @include mq-1050 {
+        color: black;
+        top: 65px;
+      }
+      a {
+        margin: 0 10px;
+      }
+    }
+  }
+  
+}
+
