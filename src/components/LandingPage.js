@@ -74,7 +74,7 @@ class LandingPage extends Component {
                                     <p>or</p>
                                     <div className="skipToEvents"
                                     onClick={this.moveToSection}>
-                                        <p>Skip</p>
+                                        <p>Skip To Events</p>
                                         {/* link to events (scroll) */}
                                     </div>
                                 </div>

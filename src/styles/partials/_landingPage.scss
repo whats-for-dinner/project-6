@@ -2,7 +2,7 @@
     header {
 
         // general layout/positioning
-        height: 50px;
+        height: 55px;
         padding: 5px;
         display: flex;
         justify-content: center;
@@ -16,7 +16,7 @@
             padding: 6px 20px;
             font-family: $heading;
             font-weight: 700;
-            font-size: 2.7rem;
+            font-size: 3.5rem;
         }
     }
     ul {
@@ -46,7 +46,7 @@
             padding: 15px 0;
             h2 {
                 font-weight: 400;
-                @include mq-930 {
+                @include mq-980 {
                     background:white;
                     padding: 10px;
                 }
@@ -54,7 +54,7 @@
         }
     }
     .startForm {
-        @include mq-930 {
+        @include mq-980 {
             flex: 1 1 100%;
         }
         text-align: left;
@@ -63,17 +63,17 @@
             height: 60px;
             margin-right: 10px;
             padding-left: 10px;
-            @include mq-930 {
+            @include mq-980 {
                 flex: 1 1 100%;
                 margin-right: 0;
             }
         }
         display: flex;
-        @include mq-930 {
+        @include mq-980 {
             display: block;
             background: rgba(255, 255, 255, 0.705);
         }
-        @include mq-930 {
+        @include mq-980 {
             p {
                 margin-top: 25px;
             }
@@ -88,7 +88,7 @@
     }
     .buttons {
         display: flex;
-        @include mq-930 {
+        @include mq-980 {
             justify-content: space-between;
             width: 100%;
         }
@@ -98,7 +98,7 @@
 
 button,
 .skipToEvents {
-    width: 150px;
+    width: 170px;
     height: 60px;
     font-family: $body;
     font-weight: 600;
@@ -110,11 +110,11 @@ button,
 
 button.submit {
     margin-right: 5px;
-    @include mq-930 {
+    @include mq-980 {
         flex: 1 1 50%;
         margin-top: 10px;
     }
-    // @include mq-930 {
+    // @include mq-980 {
     //     margin-top: 10px;
     // }
 }
@@ -126,7 +126,7 @@ button.submit {
     justify-content: center;
     align-items: center;
     padding-bottom: 3px;
-    @include mq-930 {
+    @include mq-980 {
         flex: 1 1 50%;
         margin-top: 10px;
     }
@@ -154,7 +154,7 @@ button.submit {
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(auto-fill, 200px);
         grid-gap: 30px 30px;
-        @include mq-930 {
+        @include mq-980 {
             grid-template-columns: repeat(2, 1fr);
         }
         @include mq-500 {
