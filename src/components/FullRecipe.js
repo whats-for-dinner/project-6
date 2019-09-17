@@ -67,28 +67,15 @@ class FullRecipe extends React.Component {
         });
       }
     });
+
+    
   }
 
-  // userSelectionToState = e => {
-  //   e.preventDefault();
-
-  //   this.setState(
-  //     {
-  //       selectedImage: this.state.recipeObject.strMealThumb,
-  //       selectedTitle: this.state.recipeObject.strMeal
-  //     },
-  //     this.props.sendUserSelectionToState(
-  //       e,
-  //       this.state.finalIngredientsArray,
-  //       this.state.recipeObject.strMealThumb,
-  //       this.state.recipeObject.strMeal
-  //     )
-  //   );
-  // };
+  
 
   sendToFirebase = (event) => {
     event.preventDefault();
-
+    
     const newRecipeObject = {recipe: this.state.recipeObject, ingredients: this.state.finalIngredientsArray}
 
     const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/recipes`)
