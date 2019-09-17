@@ -66,6 +66,10 @@ class EventPage extends Component {
     });
   }
 
+  componentWillUnmount() {
+    
+  }
+
   // event handler for name input to add guest value to state for saving
   getNewGuest = event => {
     this.setState({
@@ -189,12 +193,52 @@ class EventPage extends Component {
 
 //   deletes meal from event - will also delete the ingredient list.
 // need to make a function that also reaches into each guest and compares values and removes from their saved ingredients.
-  deleteMeal = mealId => {
-    const dbRef = firebase
+  deleteMeal = (event, mealId) => {
+    event.preventDefault();
+
+    const recipeId = event.target.id
+
+    const dbRefRecipe = firebase
       .database()
       .ref(`events/${this.props.match.params.partyName}/recipes`);
 
-    dbRef.child(mealId).remove();
+    dbRefRecipe.child(mealId).remove();
+
+    const copyRemainingIngredients = [...this.state.remainingIngredients];
+
+    const newRemainingIngredients = copyRemainingIngredients.filter((ingredientObject) => {
+        return ingredientObject.recipeNumber != recipeId
+    })
+
+    const dbRefIngredients = firebase
+      .database()
+      .ref(`events/${this.props.match.params.partyName}`);
+
+      dbRefIngredients.update({
+          unassignedIngredients: newRemainingIngredients
+      })
+    
+    const copyOfGuests = [...this.state.guestList];
+
+
+    const newGuestList = copyOfGuests.map((guest) => {
+        const filteredIngredients = guest.ingredients.filter(ingredient => {
+            return ingredient.recipeNumber != recipeId;
+        })
+        return ({
+          name: guest.name,
+          ingredients: filteredIngredients
+        })
+    });   
+    
+    const dbRefGuest = firebase.database().ref(`events/${this.props.match.params.partyName}/guests`);
+    
+    console.log(newGuestList)
+    dbRefGuest.update({
+        guestList: newGuestList
+    })
+
+
   };
 
   render() {
@@ -252,7 +296,8 @@ class EventPage extends Component {
                       />
                     </Link>
                     <button
-                      onClick={() => this.deleteMeal(recipe.recipe.strMeal)}
+                      onClick={(event) => {this.deleteMeal(event, recipe.recipe.strMeal)}}
+                      id={recipeIndex}
                     >
                       delete
                     </button>
