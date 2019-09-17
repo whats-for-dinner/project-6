@@ -13,6 +13,12 @@
   }
 }
 
+// Instructions
+
+.instructions {
+  padding-top: 50px;
+}
+
 // Grid styles
 
 ul.recipePreviews {
@@ -45,6 +51,10 @@ ul.recipePreviews {
         font-size: 1.75rem;
       }
     }
+  }
+  li:hover {
+    opacity: 0.5;
+    filter: alpha(opacity=100);
   }
   img {
     max-width: 100%;

@@ -76,6 +76,9 @@ class RecipeGrid extends Component {
               <option value='Miscellaneous'>Miscellaneous</option>
             </select>
           </div>
+          <p className='instructions'>
+            Select a category from the drop down menu then press a recipe!
+          </p>
         </form>
         <div>
           <ul className='recipePreviews'>
