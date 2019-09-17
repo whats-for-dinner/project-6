@@ -67,7 +67,7 @@ class EventPage extends Component {
   }
 
   componentWillUnmount() {
-    
+
   }
 
   // event handler for name input to add guest value to state for saving
@@ -119,6 +119,8 @@ class EventPage extends Component {
       currentIngredients: savedIngredients
     });
   };
+
+//   test
 
 //   for selecting the ingredients to add to their list
   selectIngredient = event => {
