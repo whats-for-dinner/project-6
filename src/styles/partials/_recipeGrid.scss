@@ -13,6 +13,12 @@
   }
 }
 
+// Instructions
+
+.instructions {
+  padding-top: 50px;
+}
+
 // Grid styles
 
 ul.recipePreviews {
@@ -22,7 +28,7 @@ ul.recipePreviews {
   grid-template-columns: 1fr 1fr 1fr;
   grid-row-gap: 15px;
   grid-column-gap: 25px;
-  @include mq-930 {
+  @include mq-980 {
     grid-template-columns: 1fr 1fr;
   }
   @include mq-500 {
@@ -40,11 +46,15 @@ ul.recipePreviews {
       min-height: 80px;
       font-weight: 400;
       text-transform: uppercase;
-      @include mq-930 {
+      @include mq-980 {
         padding: 10px 5px;
         font-size: 1.75rem;
       }
     }
+  }
+  li:hover {
+    opacity: 0.5;
+    filter: alpha(opacity=100);
   }
   img {
     max-width: 100%;

@@ -56,7 +56,7 @@ class LandingPage extends Component {
                 <section className="start">
                     <div className="wrapper startContainer">
                         <div className="tagLine">
-                            <h2>We help you organize Dinner Parties</h2>
+                            <h2>We help you organize <span className="redText">Dinner Parties</span></h2>
                         </div>
                         <div className="startForm">
                             <form 
@@ -74,7 +74,7 @@ class LandingPage extends Component {
                                     <p>or</p>
                                     <div className="skipToEvents"
                                     onClick={this.moveToSection}>
-                                        <p>Skip</p>
+                                        <p>Skip To Events</p>
                                         {/* link to events (scroll) */}
                                     </div>
                                 </div>
@@ -87,7 +87,7 @@ class LandingPage extends Component {
                     <div className="wrapper">
                         <div>
                             <h2>Events</h2>
-                            <h3>Find your dinner party</h3>
+                            <h3>Click on event to view dinner party</h3>
                         </div>
                         <ul>
                             {/* map through this.state.events and return events to page as <li> elements in <Link>s. */}
@@ -96,10 +96,12 @@ class LandingPage extends Component {
                                 this.props.event.map((userEvents, eventIndex) => {
                                     return (
                                         // console.log(userEvents.eventName)
-                                        <li key={eventIndex} >
-                                            <Link to={`/dashboard/${userEvents.eventName}`} 
-                                            >{userEvents.eventName}</Link>
-                                        </li>
+                                            <Link to={`/dashboard/${userEvents.eventName}`}>
+                                                <li key={eventIndex}>
+                                                    {userEvents.eventName}
+                                                </li>
+                                            </Link>
+                                            
                                     )
                                 }
                             ):null}
