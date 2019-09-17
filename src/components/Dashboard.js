@@ -125,7 +125,7 @@ class EventPage extends Component {
         event.preventDefault();
 
         const name = event.target.value
-        const index = event.target.key
+        const index = parseInt(event.target.name, 10)
         console.log("index?", index)
         const copyOfIngredients = [...this.state.currentIngredients]
 
@@ -219,10 +219,18 @@ class EventPage extends Component {
                 <section className="ingredients">
                     <ul>
                         {this.state.recipes ?
-                            this.state.recipes.map((recipe, recipeIndex) => {
-                                return recipe.ingredients ? (recipe.ingredients).map((ingredient, index) => {
-                                    return <li key={recipeIndex + index}><button onClick={this.selectIngredient} value={ingredient}>{ingredient}</button></li>
-                                }) : console.log("no")
+                            this.state.remainingIngredients.map((ingredient, index) => {
+                                return (
+                                  <li key={index}>
+                                    <button
+                                      name={index}
+                                      onClick={this.selectIngredient}
+                                      value={ingredient}
+                                    >
+                                      {ingredient}
+                                    </button>
+                                  </li>
+                                );
                     
                             })
                             : console.log("fail")}
