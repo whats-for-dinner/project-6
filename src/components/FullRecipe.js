@@ -105,34 +105,48 @@ class FullRecipe extends React.Component {
       console.log(this.props);
     }
     return (
-      <div className=''>
-        <header>
-          <h1>Full Recipes</h1>
+      <div className='fullRecipe'>
+        <header className='mainHeader'>
+          <h1>What's For Dinner?</h1>
+          <nav>
+            <Link to='/' className='link'>
+                Home
+            </Link>
+              <Link
+                to={`/dashboard/${this.props.match.params.partyName}`}
+                className='link'>
+                Event Dashboard
+            </Link>
+            <Link
+                to={`/recipegrid/${this.props.match.params.partyName}`}
+                className='link'>
+                Recipes
+            </Link>
+          </nav>
         </header>
-        <div className='navContainer'>
-          <button onClick={this.sendToFirebase}>Save recipe</button>
-          <Link to='/' className='link'>
-            Home
-          </Link>
-          <Link
-            to={`/dashboard/${this.props.match.params.partyName}`}
-            className='link'>
-            Event Dashboard
-          </Link>
-          <Link
-            to={`/recipegrid/${this.props.match.params.partyName}`}
-            className='link'>
-            Recipes
-          </Link>
+        <div className='titleAndPicture'>
+          <div className='imageContainer'>
+            <img src={this.state.recipeObject.strMealThumb} alt='' />
+          </div>
+          <div className="recipeTitle">
+            <h2>          {this.state.recipeObject.strMeal}</h2>
+            <button onClick={this.sendToFirebase}>Save recipe</button>
+          </div>
         </div>
-        <div className='imageAndTitleContainer'>
-          <h2>{this.state.recipeObject.strMeal}</h2>
-          <img src={this.state.recipeObject.strMealThumb} alt='' />
+
+        <div className="recipeContainer">
+          <div className="ingredientList">
+          {this.state.finalIngredientsArray.map(item => {
+          	  return <p>{item}</p>;
+          	})}
+          </div>
+          <div className="recipeInstructions">
+          	<div className="instruction">
+          		<h3>Instructions:</h3>
+          		<p>{this.state.recipeObject.strInstructions}</p>
+          	</div>
+          </div>
         </div>
-        {this.state.finalIngredientsArray.map(item => {
-          return <p>{item}</p>;
-        })}
-        <p>{this.state.recipeObject.strInstructions}</p>
       </div>
     );
   }
