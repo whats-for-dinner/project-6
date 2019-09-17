@@ -114,7 +114,10 @@ class EventPage extends Component {
         const copyOfIngredients = [...this.state.currentIngredients]
 
         copyOfIngredients.push(name)
+
         console.log("!!",copyOfIngredients)
+
+        
         this.setState({
             currentIngredients: copyOfIngredients,
         })
