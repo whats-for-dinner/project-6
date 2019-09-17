@@ -3,317 +3,337 @@ import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import firebase from '../firebase';
 
 class EventPage extends Component {
-    constructor(){
-        super();
-        this.state = ({
-            event: [],
-            newGuest: "",
-            guestList: [],
-            recipes: [],
-            currentGuest: "",
-            currentIngredients: [],
-            remainingIngredients: [],
-        })
-    }
+  constructor() {
+    super();
+    this.state = {
+      // event from events in firebase
+      event: [],
+      // for adding guests
+      newGuest: "",
+      guestList: [],
+      // displaying recipe information
+      recipes: [],
+      remainingIngredients: [],
+      // for picking ingredients
+      currentGuest: "",
+      currentIngredients: []
+    };
+  }
 
-    // problem only saving which url we are at onClick makes it so we cant refresh the page and have the right info show. We only get that value the moment the page is opened. need to solve this.props.match.params!! fuck
-    // component did mount- match event clicked to the right directory. Save index to state and use it in file path for firebase? use some variables?
-    componentDidMount() {
-        const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}`)
+  componentDidMount() {
+    // using the name of the party from the url will match the item in firebase
+    const dbRef = firebase
+      .database()
+      .ref(`events/${this.props.match.params.partyName}`);
 
-        dbRef.on('value', (data) => {
-            const event = data.val();
+    dbRef.on("value", data => {
+      const event = data.val();
+      // make an array from the object in firebase
+      const firebaseArray = Object.values(event);
 
-            const firebaseArray = Object.values(event);
-       
-            const fullRecipes = Object.values(firebaseArray[2])
-            fullRecipes.pop()
+      const fullRecipes = Object.values(firebaseArray[2]);
+      // remove the dummy data so the map doesn't fail
+      fullRecipes.pop();
 
-            const remainingIngredients = fullRecipes.map((recipe, index) => {
-                return recipe.ingredients
-                .map((ingredient, index) => {
-                    return ingredient
-                })
-            })
-
-            const ingredients  = remainingIngredients.reduce(function(a, b) {
-              return a.concat(b);
-            }, []);
-
-            console.log(ingredients)
-            
-            this.setState({
-                event: firebaseArray,
-                guestList: firebaseArray[1].guestList ? firebaseArray[1].guestList : [],
-                recipes: firebaseArray[2] ? fullRecipes : [], 
-                remainingIngredients: firebaseArray[2] ? ingredients : [], 
-            })
+      // map over saved recipes to get the total ingredient list from saved recipes
+      // the map produces an array of arrays.
+      const remainingIngredients = fullRecipes.map((recipe, index) => {
+        return recipe.ingredients.map((ingredients, index) => {
+          return ingredients;
         });
-        
-    }
-    
-    // event handler for name input and on submit for sending to firebase
-    getNewGuest = (event) => {
-        this.setState({
-            [event.target.name]: event.target.value,
-        })  
+      });
+      // to combine those arrays into one array
+      const ingredients = remainingIngredients.reduce(function(a, b) {
+        return a.concat(b);
+      }, []);
 
-    }
-    
-    addGuest = (event) => {
-        event.preventDefault();
-        
-        const copyOfGuests = [...this.state.guestList];
+      // set state with values needed from firebase
+      this.setState({
+        event: firebaseArray,
+        guestList: firebaseArray[1].guestList ? firebaseArray[1].guestList : [],
+        recipes: firebaseArray[2] ? fullRecipes : [],
+        remainingIngredients: firebaseArray[2] ? ingredients : []
+      });
+    });
+  }
 
-        const makeObject = { name: this.state.newGuest}
-        
-        copyOfGuests.unshift(makeObject);
+  // event handler for name input to add guest value to state for saving
+  getNewGuest = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  };
 
-        this.setState({
-            guestList: copyOfGuests,
-            newGuest: ''
-        }, () => {
-            const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests`);
+  // adds guest to guest list and then sends the new whole list up to firebase
+  addGuest = event => {
+    event.preventDefault();
 
-            dbRef.update({
-                guestList: this.state.guestList,
-                
-            })
-        })
-        
-    }
+    const copyOfGuests = [...this.state.guestList];
+    // makes the guest into an object so ingredients can be added later
+    const makeObject = { name: this.state.newGuest };
+    // puts the new guest at the start of the list
+    copyOfGuests.unshift(makeObject);
 
-    // test to add ingredients to a guest
-    addIngredient = (event) => {
-        event.preventDefault();
-
-        // const savedIngredients = [this.state.guestList[this.state.currentGuest].ingredients]
-
-    
-        // use the id of the guest (currentGuest) to find if they have already got ingredients
-        // this.state.guestList[this.state.currentGuest].ingredients ? savedIngredients
-            
-        // guestList[this.state.currentGuest].ingredients ? 
-        // if they have ingredients(in firebase) spread that array and add the values to the currentIngredient array
-
-        const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests/guestList/${this.state.currentGuest}`);
+    this.setState(
+      {
+        guestList: copyOfGuests,
+        newGuest: ""
+      },
+      () => {
+        const dbRef = firebase
+          .database()
+          .ref(`events/${this.props.match.params.partyName}/guests`);
 
         dbRef.update({
-            ingredients: this.state.currentIngredients,
-        }
-        , () => {
-            this.setState({
-                currentIngredients: [],
-            })
-        }
-        )
-    }
+          guestList: this.state.guestList
+        });
+      }
+    );
+  };
 
-    currentGuest = (event) => {
-        event.preventDefault();
-        const string = event.target.value.toString()
 
-        const savedIngredients = this.state.guestList[string].ingredients ? [...this.state.guestList[string].ingredients] : []
-        // console.log(string)
+//   finds out which guest is selecting ingredients to add to their list
+  currentGuest = event => {
+    event.preventDefault();
+    const string = event.target.value.toString();
+    // retrieves ingredients they already have saved in firebase and puts in "cart" array. so existing ingredients don't get overwritten (in firebase) and also allows users to make changes to their entire list.
+    const savedIngredients = this.state.guestList[string].ingredients
+      ? [...this.state.guestList[string].ingredients]
+      : [];
+
+    this.setState({
+      currentGuest: string,
+      currentIngredients: savedIngredients
+    });
+  };
+
+//   for selecting the ingredients to add to their list
+  selectIngredient = event => {
+    event.preventDefault();
+
+    // get the name of the ingredient to be added
+    const name = event.target.value;
+
+    // index so that the ingredient can be removed from the master list
+    const index = parseInt(event.target.name, 10);
+
+    // adds the ingredient to the "cart"
+    const copyOfIngredients = [...this.state.currentIngredients];
+    copyOfIngredients.push(name);
+
+    // removes the ingredient from master list (this is not functional yet as it gets re-rendered from firebase in componentDidMount)
+    const availableIngredients = this.state.remainingIngredients;
+    availableIngredients.splice(index, 1);
+
+    this.setState({
+      currentIngredients: copyOfIngredients,
+      remainingIngredients: availableIngredients
+    });
+  };
+
+//   saving the ingredients to specific guests of that event in firebase.
+  addIngredient = event => {
+    event.preventDefault();
+
+    const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests/guestList/${this.state.currentGuest}`);
+
+    dbRef.update({
+        ingredients: this.state.currentIngredients
+    },() => {
+        // clears the selected ingredients for the next user
         this.setState({
-            currentGuest: string,
-            currentIngredients: savedIngredients,
-        })  
-    }
+          currentIngredients: []
+        });
+      }
+    );
+  };
 
-    selectIngredient = (event) => {
-        event.preventDefault();
+//   to remove item from cart
+// if we get delete from master list working- this needs to then add it back 
+  removeFromCart = event => {
+    event.preventDefault();
+    // value comes out as a string of the index
+    const ingredient = event.target.value;
+    // make it a number
+    const index = parseInt(ingredient, 10);
 
-        const name = event.target.value
-        const index = parseInt(event.target.name, 10)
+    const copyOfCart = this.state.currentIngredients;
+    // remove that item from the "cart"
+    copyOfCart.splice(index, 1);
 
-        // console.log("index?", index)
+    this.setState({
+      currentIngredients: copyOfCart
+    });
+  };
 
-        const copyOfIngredients = [...this.state.currentIngredients];
-        copyOfIngredients.push(name);
+//   deletes meal from event - will also delete the ingredient list.
+// need to make a function that also reaches into each guest and compares values and removes from their saved ingredients.
+  deleteMeal = mealId => {
+    const dbRef = firebase
+      .database()
+      .ref(`events/${this.props.match.params.partyName}/recipes`);
 
-        // console.log("!!",copyOfIngredients)
+    dbRef.child(mealId).remove();
+  };
 
+  render() {
+    // disable buttons for forms when stuff is incomplete
+    const isEnabled = this.state.newGuest.length > 0;
+    const cartIsEnabled =
+      this.state.currentGuest !== "" && this.state.currentIngredients !== [];
 
-        const availableIngredients = this.state.remainingIngredients 
-        availableIngredients.splice(index, 1)
+    return (
+      <div className="dashBoard">
+        <header className="dash">
+          <h1>{this.state.event[0]}</h1>
+          <Link to="/">Home</Link>
+        </header>
 
+        <div className="stepOne">
+          <form onSubmit={this.addGuest} action="">
+            <label htmlFor="addGuest"></label>
+            {/* Below input adds guest to guest array on event object in Firebase. */}
 
-        
-        this.setState({
-            currentIngredients: copyOfIngredients,
-            remainingIngredients: availableIngredients,
-        })
-    }
+            <input
+              onChange={this.getNewGuest}
+              name="newGuest"
+              placeholder="add a new guest one at a time"
+              value={this.state.newGuest}
+              type="text"
+              id="addGuest"
+            />
+            <label htmlFor="clickToSubmitGuest"></label>
+            <button disabled={!isEnabled} id="clickToSubmitGuest">
+              Add guest
+            </button>
+          </form>
 
-    removeFromCart = (event) => {
-        event.preventDefault();
+          {/* Below link takes user to page where they select recipes */}
+          <Link to={`/recipegrid/${this.props.match.params.partyName}`}>
+            Find Recipes
+          </Link>
+        </div>
 
-        const ingredient = event.target.value
-        
-        const index = parseInt(ingredient, 10)
-    
-        const copyOfCart = this.state.currentIngredients
-    
-        copyOfCart.splice(index, 1)
-        
-        this.setState({
-            currentIngredients: copyOfCart,
-        })
-    }
+        {/* Maps chosen recipe details to page as a link to the full recipe */}
+        <section className="chosenRecipes">
+          {this.state.recipes
+            ? this.state.recipes.map((recipe, recipeIndex) => {
+                return (
+                  <div>
+                    <Link
+                      key={recipeIndex}
+                      to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`}
+                    >
+                      <h3>{recipe.recipe.strMeal}</h3>
+                      <img
+                        src={recipe.recipe.strMealThumb}
+                        alt={recipe.recipe.strMeal}
+                      />
+                    </Link>
+                    <button
+                      onClick={() => this.deleteMeal(recipe.recipe.strMeal)}
+                    >
+                      delete
+                    </button>
+                  </div>
+                );
+              })
+            : console.log("fail")}
+        </section>
 
-    deleteMeal = (mealId) => {
-        
-        const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/recipes`)
+        <div className="stepTwo">
+          {/* Maps the master ingredient list to the page */}
+          <section className="ingredients">
+            <ul>
+              {this.state.recipes
+                ? this.state.remainingIngredients.map((ingredient, index) => {
+                    return (
+                      <li key={index}>
+                        <button
+                          name={index}
+                          onClick={this.selectIngredient}
+                          value={ingredient}
+                        >
+                          {ingredient}
+                        </button>
+                      </li>
+                    );
+                  })
+                : console.log("fail")}
+            </ul>
+          </section>
 
-        dbRef.child(mealId).remove();
-     
-    }
-    
+          <section className="basket">
+            {/* form for the "cart" so users can add ingredients to their lists */}
+            <form action="">
+              <select onChange={this.currentGuest} name="" id="">
+                {/* map users and save the value of the index number */}
+                <option value="">Please Select a Guest</option>
+                {this.state.guestList
+                  ? this.state.guestList.map((guest, guestIndex) => {
+                      return (
+                        <option name="currentGuest" value={guestIndex}>
+                          {guest.name}
+                        </option>
+                      );
+                    })
+                  : console.log("fail")}
+              </select>
+              <div>
+                {/* display what is in their "cart"*/}
+                <ul>
+                  {this.state.currentIngredients
+                    ? this.state.currentIngredients.map(
+                        (ingredient, ingredientIndex) => {
+                          return (
+                            <div>
+                              <li key={ingredientIndex}>{ingredient}</li>
+                              <button
+                                value={ingredientIndex}
+                                onClick={this.removeFromCart}
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          );
+                        }
+                      )
+                    : console.log("fail")}
+                </ul>
+              </div>
+              {/* button pushes to firebase */}
+              <button disabled={!cartIsEnabled} onClick={this.addIngredient}>
+                Save
+              </button>
+              {!cartIsEnabled && (
+                <p>
+                  Please check you have selected a guest and some ingredients
+                </p>
+              )}
+            </form>
+          </section>
+        </div>
 
-  
-    render(){
-        // console.log(this.state.guestList)
-        const isEnabled = this.state.newGuest.length > 0;
-        const cartIsEnabled = this.state.currentGuest !== "" && this.state.currentIngredients !== []
-        
-        return (
-            
-            <div className="dashBoard">
-                <h1>{this.state.event[0]}</h1>
-                {/* <button>
-                    Add guests
-                </button> */}
-                <Link to="/">Home</Link>
-                {/* Below link takes user to page where they select recipes */}
-                <Link to={`/recipegrid/${this.props.match.params.partyName}`}>Find Recipes</Link>
-                {/* Below link is conditionally rendered if recipe exists.  Will contain an image that is determined by recipes in state. */}
-                {/* <Link to="/fullrecipe/:">Full Recipe</Link> */}
-                <form onSubmit={this.addGuest} action="">
-                    <label htmlFor="addGuest"></label>
-                    {/* Below input adds guest to guest array on event object in Firebase. */}
-
-                    <input onChange={this.getNewGuest} name="newGuest" placeholder="add a new guest one at a time" value={this.state.newGuest} type="text" id="addGuest"/>
-                    <label htmlFor="clickToSubmitGuest"></label>
-                    <button disabled={!isEnabled} id="clickToSubmitGuest">Add guest</button>
-                </form>
-
-                <section>
-                    
-
-                    {this.state.recipes ?
-                        this.state.recipes.map((recipe, recipeIndex) => {
-                            return (
-                                // console.log(recipe.recipe.strMeal)
-                                 <div>
-                                     <Link key={recipeIndex}to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`}>
-                                        
-                                            <h3>{recipe.recipe.strMeal}</h3>
-                                             <img src={recipe.recipe.strMealThumb} alt={recipe.recipe.strMeal}/>   
-                                    </Link>
-                                    <button onClick={() => this.deleteMeal(recipe.recipe.strMeal)}>delete</button>
-                                 </div>
-                            )
-                        })
-                        : console.log("fail")}
-                    
-                </section>
-
-
-
-                <section className="ingredients">
+        <section className="guests stepThree">
+          {this.state.guestList
+            ? this.state.guestList.map((guest, guestIndex) => {
+                return (
+                  <div>
+                    <h3 key={guestIndex}>{guest.name}</h3>
                     <ul>
-                        {this.state.recipes ?
-                            this.state.remainingIngredients.map((ingredient, index) => {
-                                return (
-                                  <li key={index}>
-                                    <button
-                                      name={index}
-                                      onClick={this.selectIngredient}
-                                      value={ingredient}
-                                    >
-                                      {ingredient}
-                                    </button>
-                                  </li>
-                                );
-                    
-                            })
-                            : console.log("fail")}
+                      {guest.ingredients
+                        ? guest.ingredients.map((ingredient, index) => {
+                            return <li key={index}> {ingredient}</li>;
+                          })
+                        : console.log("fail")}
                     </ul>
-                    {/* <button onClick={this.addIngredient}>test</button> */}
-                </section>
-
-
-
-
-                <section className="basket">
-                    <form action="">
-                        <select onChange={this.currentGuest}name="" id="">
-                            {/* map users and save the value of the index number */}
-                            <option value="">Please Select a Guest</option>
-                            {this.state.guestList ?
-                                // console.log(this.state.guestList)
-                                this.state.guestList.map((guest, guestIndex) => {
-                                    return (
-                                        <option name="currentGuest" value={guestIndex}>{guest.name}</option>
-                                    )
-                                })
-                                : console.log("fail")
-                            }
-                        </select>
-                        <div>
-                        {/* render array of choices */}
-                        <ul>
-                            {this.state.currentIngredients ?
-                                // console.log(this.state.guestList)
-                                this.state.currentIngredients.map((ingredient, ingredientIndex) => {
-                                    return (
-                                        <div>
-                                        	<li key={ingredientIndex}>{ingredient}</li>
-                                            <button value={ingredientIndex} onClick={this.removeFromCart}>Remove</button>
-                                        </div>
-                                    )
-                                })
-                                : console.log("fail")
-                            }
-                        </ul>    
-                        </div>
-                        {/* button pushes to firebase */}
-                        <button disabled={!cartIsEnabled} onClick={this.addIngredient}>Save</button>
-                        {!cartIsEnabled && <p>Please check you have selected a guest and some ingredients</p>}
-                    </form>    
-                </section>
-
-                <section className="guests">
-                    {this.state.guestList ?
-                        // console.log(this.state.guestList)
-                        this.state.guestList.map((guest, guestIndex) => {
-                            return (
-                                <div>
-                                    <h3 key={guestIndex}>{guest.name}</h3>
-                                    <ul>
-                                        {/* {console.log("pritn", guest.ingredients)} */}
-                                        {guest.ingredients ?
-                                            // console.log(this.state.guestList)
-                                            guest.ingredients.map((ingredient, index) => {
-                                                return (
-                                                    // console.log("index.ingred",guest.ingredients)
-                                                    < li key = { index } > {ingredient}</li>
-                                                )
-                                            })
-                                            : console.log("fail")
-                                        } 
-                                    </ul>
-                                </div> 
-                            )
-                        })
-                         : console.log("fail")}
-                </section>
-
-
-            </div>
-        
-        );
+                  </div>
+                );
+              })
+            : console.log("fail")}
+        </section>
+      </div>
+    );
   }
 }
 export default EventPage;
