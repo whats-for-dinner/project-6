@@ -113,7 +113,7 @@ class EventPage extends Component {
         event.preventDefault();
         const string = event.target.value.toString()
 
-        const savedIngredients = this.state.guestList[string].ingredients ? [...this.state.guestList[string].ingredients] : [];
+        const savedIngredients = this.state.guestList[string].ingredients ? [...this.state.guestList[string].ingredients] : []
         // console.log(string)
         this.setState({
             currentGuest: string,
@@ -126,18 +126,23 @@ class EventPage extends Component {
 
         const name = event.target.value
         const index = parseInt(event.target.name, 10)
-        console.log("index?", index)
-        const copyOfIngredients = [...this.state.currentIngredients]
 
-        copyOfIngredients.push(name)
+        // console.log("index?", index)
 
-        // const availableIngredients = 
+        const copyOfIngredients = [...this.state.currentIngredients];
+        copyOfIngredients.push(name);
 
-        console.log("!!",copyOfIngredients)
+        // console.log("!!",copyOfIngredients)
+
+
+        const availableIngredients = this.state.remainingIngredients 
+        availableIngredients.splice(index, 1)
+
 
         
         this.setState({
             currentIngredients: copyOfIngredients,
+            remainingIngredients: availableIngredients,
         })
     }
 
