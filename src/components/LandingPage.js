@@ -1,7 +1,5 @@
 import React,{Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
-import heroImage from '../images/heroImage.png';
-import firebase from '../firebase';
 import {Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
 
 
@@ -36,7 +34,7 @@ class LandingPage extends Component {
     moveToSection = () => {
         scroller.scrollTo('events', {
             duration: 1500,
-            delay: 20,
+            delay: 10,
             smooth: "easeInOutQuint",
         });
     }
@@ -46,12 +44,6 @@ class LandingPage extends Component {
             <div className="landingPage">
                 <header className="landingHeader">
                     <h1>What's For Dinner?</h1>
-                    {/* <nav>
-                        <ul>
-                            <li><Link to="/">Home</Link></li>
-                            <li><Link to="/event/:">Event Page</Link></li>
-                        </ul>
-                    </nav> */}
                 </header>
                 <section className="start">
                     <div className="wrapper startContainer">
@@ -59,8 +51,7 @@ class LandingPage extends Component {
                             <h2>We help you organize <span className="redText">Dinner Parties</span></h2>
                         </div>
                         <div className="startForm">
-                            <form 
-                            // onSubmit={this.pushToFirebase} 
+                            <form  
                             onSubmit={this.checkName}
                             action=""> 
                                 {this.props.errorMessage !=='' ? <p>{this.props.errorMessage}</p> : null}
@@ -100,8 +91,7 @@ class LandingPage extends Component {
                                                 <li key={eventIndex}>
                                                     {userEvents.eventName}
                                                 </li>
-                                            </Link>
-                                            
+                                            </Link>     
                                     )
                                 }
                             ):null}
