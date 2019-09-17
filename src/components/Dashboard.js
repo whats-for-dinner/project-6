@@ -34,23 +34,27 @@ class EventPage extends Component {
       const fullRecipes = Object.values(firebaseArray[2]);
       // remove the dummy data so the map doesn't fail
       fullRecipes.pop();
+        let ingredients = [];
+        if (firebaseArray[3][0] === "dummy") {
 
-      // map over saved recipes to get the total ingredient list from saved recipes
-      // the map produces an array of arrays.
-      const remainingIngredients = fullRecipes.map((recipe, index) => {
-        return recipe.ingredients.map((ingredient) => {
-          return (
-            {item: ingredient, recipeNumber: index}
-          );
-        });
-      });
-      console.log(remainingIngredients)
-      // to combine those arrays into one array
-      const ingredients = remainingIngredients.reduce(function(a, b) {
-        return a.concat(b);
-      }, []);
-      console.log(ingredients)
-    
+            // map over saved recipes to get the total ingredient list from saved recipes
+            // the map produces an array of arrays.
+            const remainingIngredients = fullRecipes.map((recipe, index) => {
+                return recipe.ingredients.map((ingredient) => {
+                return (
+                    {item: ingredient, recipeNumber: index}
+                );
+                });
+            });
+            console.log(remainingIngredients)
+            // to combine those arrays into one array
+            ingredients = remainingIngredients.reduce(function(a, b) {
+                return a.concat(b);
+            }, []);
+            
+        } else {
+            ingredients = firebaseArray[3];
+        }
 
       // set state with values needed from firebase
       this.setState({
@@ -140,10 +144,18 @@ class EventPage extends Component {
   addIngredient = event => {
     event.preventDefault();
 
-    const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests/guestList/${this.state.currentGuest}`);
+    const dbRefUser = firebase.database().ref(`events/${this.props.match.params.partyName}/guests/guestList/${this.state.currentGuest}`);
 
-    dbRef.update({
+    dbRefUser.update({
         ingredients: this.state.currentIngredients
+    });
+
+    const dbRefIngredients = firebase
+      .database()
+      .ref(`events/${this.props.match.params.partyName}`);
+
+    dbRefIngredients.update({
+      unassignedIngredients: this.state.remainingIngredients,
     });
   };
 
