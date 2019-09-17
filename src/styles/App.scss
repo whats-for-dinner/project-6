@@ -3,6 +3,7 @@
 @import 'partials/landingPage';
 @import 'partials/recipeGrid';
 @import 'partials/fullRecipe';
+@import 'partials/dashboard';
 
 html {
     font-size: 62.5%;
@@ -40,4 +41,16 @@ h3,
 ul {
     margin: 0;
     padding: 0;
+}
+
+footer {
+    background: $black;
+    color: white;
+    font-size: 1.8rem;
+    padding: 10px;
+    p {
+        margin: 0;
+        letter-spacing: 0.1rem;
+        opacity: 0.5;
+    }
 }

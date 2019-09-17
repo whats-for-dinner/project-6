@@ -64,7 +64,7 @@ class LandingPage extends Component {
                             onSubmit={this.checkName}
                             action=""> 
                                 {this.props.errorMessage !=='' ? <p>{this.props.errorMessage}</p> : null}
-                                <input onChange={this.props.getEventName} name="createEvent" className="createEvent" type="text" placeholder="enter your group name"/>
+                                <input onChange={this.props.getEventName} name="createEvent" className="createEvent" type="text" placeholder="enter the organizer's name"/>
                                 <label htmlFor="createEvent" className="visuallyHidden">Enter your group name</label>
                                 <div className="buttons">
                                     <button className="submit">
