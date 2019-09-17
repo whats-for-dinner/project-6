@@ -34,18 +34,27 @@ class EventPage extends Component {
       const fullRecipes = Object.values(firebaseArray[2]);
       // remove the dummy data so the map doesn't fail
       fullRecipes.pop();
+        let ingredients = [];
+        if (firebaseArray[3][0] === "dummy") {
 
-      // map over saved recipes to get the total ingredient list from saved recipes
-      // the map produces an array of arrays.
-      const remainingIngredients = fullRecipes.map((recipe, index) => {
-        return recipe.ingredients.map((ingredients, index) => {
-          return ingredients;
-        });
-      });
-      // to combine those arrays into one array
-      const ingredients = remainingIngredients.reduce(function(a, b) {
-        return a.concat(b);
-      }, []);
+            // map over saved recipes to get the total ingredient list from saved recipes
+            // the map produces an array of arrays.
+            const remainingIngredients = fullRecipes.map((recipe, index) => {
+                return recipe.ingredients.map((ingredient) => {
+                return (
+                    {item: ingredient, recipeNumber: index}
+                );
+                });
+            });
+            console.log(remainingIngredients)
+            // to combine those arrays into one array
+            ingredients = remainingIngredients.reduce(function(a, b) {
+                return a.concat(b);
+            }, []);
+            
+        } else {
+            ingredients = firebaseArray[3];
+        }
 
       // set state with values needed from firebase
       this.setState({
@@ -55,6 +64,10 @@ class EventPage extends Component {
         remainingIngredients: firebaseArray[2] ? ingredients : []
       });
     });
+  }
+
+  componentWillUnmount() {
+
   }
 
   // event handler for name input to add guest value to state for saving
@@ -107,22 +120,24 @@ class EventPage extends Component {
     });
   };
 
+//   test
+
 //   for selecting the ingredients to add to their list
   selectIngredient = event => {
     event.preventDefault();
 
     // get the name of the ingredient to be added
-    const name = event.target.value;
-
+    const ingredientObject = {item: event.target.value, recipeNumber: event.target.id};
+    console.log(ingredientObject)
     // index so that the ingredient can be removed from the master list
     const index = parseInt(event.target.name, 10);
 
     // adds the ingredient to the "cart"
     const copyOfIngredients = [...this.state.currentIngredients];
-    copyOfIngredients.push(name);
-
+    copyOfIngredients.push(ingredientObject);
+    console.log(copyOfIngredients)
     // removes the ingredient from master list (this is not functional yet as it gets re-rendered from firebase in componentDidMount)
-    const availableIngredients = this.state.remainingIngredients;
+    const availableIngredients = [...this.state.remainingIngredients];
     availableIngredients.splice(index, 1);
 
     this.setState({
@@ -135,17 +150,19 @@ class EventPage extends Component {
   addIngredient = event => {
     event.preventDefault();
 
-    const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/guests/guestList/${this.state.currentGuest}`);
+    const dbRefUser = firebase.database().ref(`events/${this.props.match.params.partyName}/guests/guestList/${this.state.currentGuest}`);
 
-    dbRef.update({
+    dbRefUser.update({
         ingredients: this.state.currentIngredients
-    },() => {
-        // clears the selected ingredients for the next user
-        this.setState({
-          currentIngredients: []
-        });
-      }
-    );
+    });
+
+    const dbRefIngredients = firebase
+      .database()
+      .ref(`events/${this.props.match.params.partyName}`);
+
+    dbRefIngredients.update({
+      unassignedIngredients: this.state.remainingIngredients,
+    });
   };
 
 //   to remove item from cart
@@ -153,7 +170,7 @@ class EventPage extends Component {
   removeFromCart = event => {
     event.preventDefault();
     // value comes out as a string of the index
-    const ingredient = event.target.value;
+    const ingredient = event.target.name;
     // make it a number
     const index = parseInt(ingredient, 10);
 
@@ -161,19 +178,69 @@ class EventPage extends Component {
     // remove that item from the "cart"
     copyOfCart.splice(index, 1);
 
+    const ingredientObject = {
+      item: event.target.value,
+      recipeNumber: event.target.id
+    };
+    
+    const copyOfIngredients = [...this.state.remainingIngredients]
+
+    copyOfIngredients.push(ingredientObject)
+
     this.setState({
-      currentIngredients: copyOfCart
+      currentIngredients: copyOfCart,
+      remainingIngredients: copyOfIngredients
     });
   };
 
 //   deletes meal from event - will also delete the ingredient list.
 // need to make a function that also reaches into each guest and compares values and removes from their saved ingredients.
-  deleteMeal = mealId => {
-    const dbRef = firebase
+  deleteMeal = (event, mealId) => {
+    event.preventDefault();
+
+    const recipeId = event.target.id
+
+    const dbRefRecipe = firebase
       .database()
       .ref(`events/${this.props.match.params.partyName}/recipes`);
 
-    dbRef.child(mealId).remove();
+    dbRefRecipe.child(mealId).remove();
+
+    const copyRemainingIngredients = [...this.state.remainingIngredients];
+
+    const newRemainingIngredients = copyRemainingIngredients.filter((ingredientObject) => {
+        return ingredientObject.recipeNumber != recipeId
+    })
+
+    const dbRefIngredients = firebase
+      .database()
+      .ref(`events/${this.props.match.params.partyName}`);
+
+      dbRefIngredients.update({
+          unassignedIngredients: newRemainingIngredients
+      })
+    
+    const copyOfGuests = [...this.state.guestList];
+
+
+    const newGuestList = copyOfGuests.map((guest) => {
+        const filteredIngredients = guest.ingredients.filter(ingredient => {
+            return ingredient.recipeNumber != recipeId;
+        })
+        return ({
+          name: guest.name,
+          ingredients: filteredIngredients
+        })
+    });   
+    
+    const dbRefGuest = firebase.database().ref(`events/${this.props.match.params.partyName}/guests`);
+    
+    console.log(newGuestList)
+    dbRefGuest.update({
+        guestList: newGuestList
+    })
+
+
   };
 
   render() {
@@ -212,7 +279,7 @@ class EventPage extends Component {
                   Add guest
                 </button>
             </form>
-          </div>
+            </div>
 
           <div className="leftSideContainer">
             {/* Below link takes user to page where they select recipes */}
@@ -220,40 +287,43 @@ class EventPage extends Component {
             <Link to={`/recipegrid/${this.props.match.params.partyName}`}><button>Find Recipes</button>
             </Link>
           </div>
-        </div>
+          </div>
+
 
         {/* Maps chosen recipe details to page as a link to the full recipe */}
         <section>
-
-                  <div className="backgroundContainer">
-                    <div className="recipesContainer">
-                      <div className="yourRecipes">
-                        <p>Your recipes:</p>
-                      </div>
-            {this.state.recipes
-            ? this.state.recipes.map((recipe, recipeIndex) => {
-                return (
-                      <div className="chosenRecipes">
-                        <Link
-                          key={recipeIndex}
-                          to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`} className="imageLink">
-                          <h3>{recipe.recipe.strMeal}</h3>
-                          <img
-                            src={recipe.recipe.strMealThumb}
-                            alt={recipe.recipe.strMeal}
-                          />
-                        </Link>
-                        <button
-                          onClick={() => this.deleteMeal(recipe.recipe.strMeal)}
-                        >
-                          delete
-                        </button>
-                      </div>
-                      );
-                  })
-              : console.log("fail")}
+          <div className="backgroundContainer">
+            <div className="recipesContainer">
+              <div className="yourRecipes">
+                <p>Your recipes:</p>
+              </div>
+              {this.state.recipes
+              ? this.state.recipes.map((recipe, recipeIndex) => {
+                  return (
+                    <div className="chosenRecipes">
+                      <Link
+                        key={recipeIndex}
+                        to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`}
+                        className="imageLink">
+                        <h3>{recipe.recipe.strMeal}</h3>
+                        <img
+                          src={recipe.recipe.strMealThumb}
+                          alt={recipe.recipe.strMeal}
+                        />
+                      </Link>
+                      <button
+                        onClick={(event) => {this.deleteMeal(event, recipe.recipe.strMeal)}}
+                        id={recipeIndex}
+                      >
+                        delete
+                      </button>
                     </div>
-                  </div>
+                  )
+                }
+                ) : null
+              }
+                </div>
+              </div>
         </section>
         <div className="stepTwo">
           {/* Maps the master ingredient list to the page */}
@@ -267,9 +337,11 @@ class EventPage extends Component {
                         <button
                           name={index}
                           onClick={this.selectIngredient}
-                          value={ingredient}
+                        //   should the value be the whole object?
+                          value={ingredient.item}
+                          id={ingredient.recipeNumber}
                         >
-                          {ingredient}
+                          {ingredient.item}
                         </button>
                       </li>
                     );
@@ -304,15 +376,17 @@ class EventPage extends Component {
                         (ingredient, ingredientIndex) => {
                           return (
                             <div>
-                              <li key={ingredientIndex}>{ingredient}
+                              <li key={ingredientIndex}>{ingredient.item}
                               <button
-                                value={ingredientIndex}
-                                onClick={this.removeFromCart} className="removeButtonStyle"
+                                name={ingredientIndex}
+                                value={ingredient.item}
+                                id={ingredient.recipeNumber}
+                                onClick={this.removeFromCart}
+                                className="removeButtonStyle"
                               >
                                 <i class="far fa-trash-alt"></i>
                               </button>
                               </li>
-   
                             </div>
                           );
                         }
@@ -327,8 +401,7 @@ class EventPage extends Component {
               {!cartIsEnabled ?
                 <p className="instructionsMessage">
                   Please Select a Guest To Add Ingredients To Their Cart
-                </p> : <p className="instructionsMessage">Click on items from your ingredients list to add them to this guests's cart</p>
-               }
+                </p> : <p className="instructionsMessage">Click on items from your ingredients list to add them to this guests's cart</p>}
               <i class="fas fa-shopping-cart"></i>
             </form>
           </section>
@@ -345,7 +418,7 @@ class EventPage extends Component {
                       <ul>
                         {guest.ingredients
                           ? guest.ingredients.map((ingredient, index) => {
-                              return <li key={index}> {ingredient}</li>;
+                              return <li key={index}> {ingredient.item}</li>;
                             })
                           : console.log("fail")}
                       </ul>
