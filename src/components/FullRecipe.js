@@ -8,7 +8,8 @@ class FullRecipe extends React.Component {
     super();
     this.state = {
       recipeObject: '',
-      finalIngredientsArray: []
+      finalIngredientsArray: [],
+      ingredientList: [],
     };
   }
 
@@ -68,7 +69,7 @@ class FullRecipe extends React.Component {
       }
     });
 
-    
+
   }
 
   
@@ -76,13 +77,59 @@ class FullRecipe extends React.Component {
   sendToFirebase = (event) => {
     event.preventDefault();
     
-    const newRecipeObject = {recipe: this.state.recipeObject, ingredients: this.state.finalIngredientsArray}
-
-    const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/recipes`)
+    const dbRef = firebase
+      .database()
+      .ref(`events/${this.props.match.params.partyName}/recipes`);
 
     dbRef.update({
-      [this.state.recipeObject.strMeal]: newRecipeObject,
+      [this.state.recipeObject.strMeal]: newRecipeObject
+    });
+    
+
+    const dbRefIngredients = firebase
+      .database()
+      .ref(`events/${this.props.match.params.partyName}/unassignedIngredients`);
+
+    dbRefIngredients.on("value", (data) => {
+      const list = data.val();
+      console.log(list)
+      const newItems = this.state.finalIngredientsArray
+      const newRecipeId = this.state.recipeObject.idMeal
+  
+      const itemsToAdd = newItems.map((ingredient) => {
+        return {item: ingredient, recipeNumber: newRecipeId}
+      })
+  
+      console.log(itemsToAdd)
+  
+      const arrayToMerge = [list, itemsToAdd]
+  
+      console.log(arrayToMerge)
+
+      const ingredients = arrayToMerge.reduce(function(a, b) {
+        return a.concat(b);
+      }, []);
+      console.log(ingredients)
+
+      this.setState({
+        ingredientList: ingredients,
+      })
     })
+
+    const newRecipeObject = {
+      recipe: this.state.recipeObject,
+      ingredients: this.state.finalIngredientsArray
+    };
+
+    
+
+    const dbRefIn = firebase
+      .database()
+      .ref(`events/${this.props.match.params.partyName}`);
+
+    dbRefIn.update({
+      unassignedIngredients: ["test array", "this is a test"]
+    });  
 
 
   }

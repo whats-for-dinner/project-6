@@ -36,27 +36,27 @@ class EventPage extends Component {
       fullRecipes.pop();
         let ingredients = [];
         console.log("this",fullRecipes)
-        if (firebaseArray[3][0] === "dummy") {
+        // if (firebaseArray[3][0] === "dummy") {
 
-            // map over saved recipes to get the total ingredient list from saved recipes
-            // the map produces an array of arrays.
-            const remainingIngredients = fullRecipes.map((recipe, index) => {
-                const recipeId = recipe.recipe.idMeal
-                return recipe.ingredients.map((ingredient) => {
-                return (
-                    {item: ingredient, recipeNumber: recipeId}
-                );
-                });
-            });
-            console.log(remainingIngredients)
-            // to combine those arrays into one array
-            ingredients = remainingIngredients.reduce(function(a, b) {
-                return a.concat(b);
-            }, []);
+        //     // map over saved recipes to get the total ingredient list from saved recipes
+        //     // the map produces an array of arrays.
+        //     const remainingIngredients = fullRecipes.map((recipe, index) => {
+        //         const recipeId = recipe.recipe.idMeal
+        //         return recipe.ingredients.map((ingredient) => {
+        //         return (
+        //             {item: ingredient, recipeNumber: recipeId}
+        //         );
+        //         });
+        //     });
+        //     console.log(remainingIngredients)
+        //     // to combine those arrays into one array
+        //     ingredients = remainingIngredients.reduce(function(a, b) {
+        //         return a.concat(b);
+        //     }, []);
             
-        } else {
-            ingredients = firebaseArray[3];
-        }
+        // } else {
+        //     ingredients = firebaseArray[3];
+        // }
 
       // set state with values needed from firebase
       this.setState({
