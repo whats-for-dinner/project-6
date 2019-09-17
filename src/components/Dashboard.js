@@ -185,70 +185,85 @@ class EventPage extends Component {
     return (
       <div className="dashBoard">
         <header className="dash">
-          <h1>{this.state.event[0]}</h1>
-          <Link to="/">Home</Link>
+          <div className="mainHeader">
+            <h1>What's For Dinner?</h1>
+            <nav>
+              <Link to="/">Home</Link>
+            </nav>
+          </div>
+          <h2>{this.state.event[0]}'s dinner party</h2>
         </header>
 
         <div className="stepOne">
-          <form onSubmit={this.addGuest} action="">
-            <label htmlFor="addGuest"></label>
-            {/* Below input adds guest to guest array on event object in Firebase. */}
+          <div className="rightSideContainer">
+            <form onSubmit={this.addGuest} action="">
+              <label htmlFor="addGuest" className="labelBorder">Add A Guest:</label>
+              {/* Below input adds guest to guest array on event object in Firebase. */}
+                <input
+                  onChange={this.getNewGuest}
+                  name="newGuest"
+                  placeholder="Enter the name of your guest"
+                  value={this.state.newGuest}
+                  type="text"
+                  id="addGuest"
+                />
+                <label className="visuallyHidden" htmlFor="clickToSubmitGuest"></label>
+                <button disabled={!isEnabled} id="clickToSubmitGuest">
+                  Add guest
+                </button>
+            </form>
+          </div>
 
-            <input
-              onChange={this.getNewGuest}
-              name="newGuest"
-              placeholder="add a new guest one at a time"
-              value={this.state.newGuest}
-              type="text"
-              id="addGuest"
-            />
-            <label htmlFor="clickToSubmitGuest"></label>
-            <button disabled={!isEnabled} id="clickToSubmitGuest">
-              Add guest
-            </button>
-          </form>
-
-          {/* Below link takes user to page where they select recipes */}
-          <Link to={`/recipegrid/${this.props.match.params.partyName}`}>
-            Find Recipes
-          </Link>
+          <div className="leftSideContainer">
+            {/* Below link takes user to page where they select recipes */}
+            <p>Add A Recipe:</p>
+            <Link to={`/recipegrid/${this.props.match.params.partyName}`}><button>Find Recipes</button>
+            </Link>
+          </div>
         </div>
 
         {/* Maps chosen recipe details to page as a link to the full recipe */}
-        <section className="chosenRecipes">
-          {this.state.recipes
+        <section>
+
+                  <div className="backgroundContainer">
+                    <div className="recipesContainer">
+                      <div className="yourRecipes">
+                        <p>Your recipes:</p>
+                      </div>
+            {this.state.recipes
             ? this.state.recipes.map((recipe, recipeIndex) => {
                 return (
-                  <div>
-                    <Link
-                      key={recipeIndex}
-                      to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`}
-                    >
-                      <h3>{recipe.recipe.strMeal}</h3>
-                      <img
-                        src={recipe.recipe.strMealThumb}
-                        alt={recipe.recipe.strMeal}
-                      />
-                    </Link>
-                    <button
-                      onClick={() => this.deleteMeal(recipe.recipe.strMeal)}
-                    >
-                      delete
-                    </button>
+                      <div className="chosenRecipes">
+                        <Link
+                          key={recipeIndex}
+                          to={`/fullrecipe/${recipe.recipe.idMeal}/${this.props.match.params.partyName}`} className="imageLink">
+                          <h3>{recipe.recipe.strMeal}</h3>
+                          <img
+                            src={recipe.recipe.strMealThumb}
+                            alt={recipe.recipe.strMeal}
+                          />
+                        </Link>
+                        <button
+                          onClick={() => this.deleteMeal(recipe.recipe.strMeal)}
+                        >
+                          delete
+                        </button>
+                      </div>
+                      );
+                  })
+              : console.log("fail")}
+                    </div>
                   </div>
-                );
-              })
-            : console.log("fail")}
         </section>
-
         <div className="stepTwo">
           {/* Maps the master ingredient list to the page */}
-          <section className="ingredients">
-            <ul>
+          <section className="ingredientsContainer">
+          <h3 className="stepTwoHeader">Your Ingredients List</h3>
+            <ul className="ingredients">
               {this.state.recipes
                 ? this.state.remainingIngredients.map((ingredient, index) => {
                     return (
-                      <li key={index}>
+                      <li key={index} className="buttonContainer">
                         <button
                           name={index}
                           onClick={this.selectIngredient}
@@ -265,7 +280,9 @@ class EventPage extends Component {
 
           <section className="basket">
             {/* form for the "cart" so users can add ingredients to their lists */}
+            <h3 className="stepTwoHeader">Who's bringing what?</h3>
             <form action="">
+              <label class="visuallyHidden">Please Select a Guest To Add Ingredients To Their Cart</label>
               <select onChange={this.currentGuest} name="" id="">
                 {/* map users and save the value of the index number */}
                 <option value="">Please Select a Guest</option>
@@ -281,19 +298,21 @@ class EventPage extends Component {
               </select>
               <div>
                 {/* display what is in their "cart"*/}
-                <ul>
+                <ul className="addedIngredientContainer">
                   {this.state.currentIngredients
                     ? this.state.currentIngredients.map(
                         (ingredient, ingredientIndex) => {
                           return (
                             <div>
-                              <li key={ingredientIndex}>{ingredient}</li>
+                              <li key={ingredientIndex}>{ingredient}
                               <button
                                 value={ingredientIndex}
-                                onClick={this.removeFromCart}
+                                onClick={this.removeFromCart} className="removeButtonStyle"
                               >
-                                Remove
+                                <i class="far fa-trash-alt"></i>
                               </button>
+                              </li>
+   
                             </div>
                           );
                         }
@@ -305,11 +324,12 @@ class EventPage extends Component {
               <button disabled={!cartIsEnabled} onClick={this.addIngredient}>
                 Save
               </button>
-              {!cartIsEnabled && (
-                <p>
-                  Please check you have selected a guest and some ingredients
-                </p>
-              )}
+              {!cartIsEnabled ?
+                <p className="instructionsMessage">
+                  Please Select a Guest To Add Ingredients To Their Cart
+                </p> : <p className="instructionsMessage">Click on items from your ingredients list to add them to this guests's cart</p>
+               }
+              <i class="fas fa-shopping-cart"></i>
             </form>
           </section>
         </div>
