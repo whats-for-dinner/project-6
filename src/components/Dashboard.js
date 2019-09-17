@@ -275,7 +275,7 @@ class EventPage extends Component {
                 <input
                   onChange={this.getNewGuest}
                   name="newGuest"
-                  placeholder="Enter the name of your guest"
+                  placeholder="Enter guest name"
                   value={this.state.newGuest}
                   type="text"
                   id="addGuest"
@@ -363,7 +363,7 @@ class EventPage extends Component {
               <label class="visuallyHidden">Please Select a Guest To Add Ingredients To Their Cart</label>
               <select onChange={this.currentGuest} name="" id="">
                 {/* map users and save the value of the index number */}
-                <option value="">Please Select a Guest</option>
+                <option value="">Guest Name</option>
                 {this.state.guestList
                   ? this.state.guestList.map((guest, guestIndex) => {
                       return (
