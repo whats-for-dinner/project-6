@@ -13,10 +13,12 @@
         color: white;
         h1 {
             color: white;
-            padding: 6px 20px;
             font-family: $heading;
             font-weight: 700;
             font-size: 3.9rem;
+            @include mq-500 {
+                font-size: 3.5rem;
+            }
         }
     }
     ul {
@@ -62,7 +64,7 @@
         }
         text-align: left;
         input {
-            width: 350px;
+            // width: 350px;
             height: 60px;
             margin-right: 10px;
             padding-left: 10px;
@@ -109,6 +111,9 @@ button,
     text-transform: uppercase;
     border: none;
     box-shadow: 1px 1px 2px $black;
+    @include mq-500 {
+        width: 30%;
+    }
 }
 
 button.submit {
