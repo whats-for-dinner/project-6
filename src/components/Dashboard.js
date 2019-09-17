@@ -12,6 +12,7 @@ class EventPage extends Component {
             recipes: [],
             currentGuest: "",
             currentIngredients: [],
+            remainingIngredients: [],
         })
     }
 
@@ -27,11 +28,25 @@ class EventPage extends Component {
        
             const fullRecipes = Object.values(firebaseArray[2])
             fullRecipes.pop()
+
+            const remainingIngredients = fullRecipes.map((recipe, index) => {
+                return recipe.ingredients
+                .map((ingredient, index) => {
+                    return ingredient
+                })
+            })
+
+            const ingredients  = remainingIngredients.reduce(function(a, b) {
+              return a.concat(b);
+            }, []);
+
+            console.log(ingredients)
             
             this.setState({
                 event: firebaseArray,
                 guestList: firebaseArray[1].guestList ? firebaseArray[1].guestList : [],
                 recipes: firebaseArray[2] ? fullRecipes : [], 
+                remainingIngredients: firebaseArray[2] ? ingredients : [], 
             })
         });
         
@@ -98,7 +113,7 @@ class EventPage extends Component {
         event.preventDefault();
         const string = event.target.value.toString()
 
-        const savedIngredients = this.state.guestList[string].ingredients ? [...this.state.guestList[string].ingredients] : null
+        const savedIngredients = this.state.guestList[string].ingredients ? [...this.state.guestList[string].ingredients] : [];
         // console.log(string)
         this.setState({
             currentGuest: string,
@@ -110,10 +125,13 @@ class EventPage extends Component {
         event.preventDefault();
 
         const name = event.target.value
-
+        const index = event.target.key
+        console.log("index?", index)
         const copyOfIngredients = [...this.state.currentIngredients]
 
         copyOfIngredients.push(name)
+
+        // const availableIngredients = 
 
         console.log("!!",copyOfIngredients)
 
