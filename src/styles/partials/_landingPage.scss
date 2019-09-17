@@ -2,7 +2,7 @@
     header {
 
         // general layout/positioning
-        height: 55px;
+        height: 59px;
         padding: 5px;
         display: flex;
         justify-content: center;
@@ -16,7 +16,7 @@
             padding: 6px 20px;
             font-family: $heading;
             font-weight: 700;
-            font-size: 3.5rem;
+            font-size: 3.9rem;
         }
     }
     ul {
@@ -29,7 +29,7 @@
         background-size: contain;
         background-repeat: no-repeat;
         background-position: right;
-        height: 90vh;
+        height: 89vh;
         @include mq-710 {
             background-size: cover;
         }
@@ -44,6 +44,9 @@
             flex: 1 0 100%;
             text-align: left;
             padding: 15px 0;
+            .redText {
+                color: $red;
+            }
             h2 {
                 font-weight: 400;
                 @include mq-980 {
@@ -146,6 +149,7 @@ button.submit {
         letter-spacing: 1.5px;
         position: relative;
         z-index: 20;
+        font-size: 2.9rem;
     }
     ul {
         padding-top: 10px;
@@ -162,30 +166,45 @@ button.submit {
         }
     }
     li {
-        flex: 0 0 32%;
-        margin-top: 20px;
-        height: 200px;
-        padding: 30px;
-        background: white;
+        // flex: 0 0 32%;
+        // margin-top: 20px;
+        // height: 200px;
+        // padding: 30px;
+        // background: $black;
+        color: white;
+        padding: 5px 10px;
+        font-size: 3rem;
         font-weight: 700;
         text-align: center;
         display: flex;
         align-items: center;
         justify-content: center;
         &:hover {
-            border: 2px solid $red;
+            text-decoration: underline;
+            color: $black;
         }
     }
     h2 {
         position: absolute;
         font-size: 9rem;
         z-index: 10;
-        color: darken($offWhite, 5%);
+        color: darken($offWhite, 4%);
         letter-spacing: 1.5px;
     }
     a {
-        background: $yellow;
+        background: $black;
         padding: 5px 10px;
+        // width: 100%;
+        padding: 30px 50px;
+        // height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 200px; 
+        &:hover {
+            background: $yellow;
+            color: $black;
+        }
     }
 
 }
