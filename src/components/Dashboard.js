@@ -38,14 +38,19 @@ class EventPage extends Component {
       // map over saved recipes to get the total ingredient list from saved recipes
       // the map produces an array of arrays.
       const remainingIngredients = fullRecipes.map((recipe, index) => {
-        return recipe.ingredients.map((ingredients, index) => {
-          return ingredients;
+        return recipe.ingredients.map((ingredient) => {
+          return (
+            {item: ingredient, recipeNumber: index}
+          );
         });
       });
+      console.log(remainingIngredients)
       // to combine those arrays into one array
       const ingredients = remainingIngredients.reduce(function(a, b) {
         return a.concat(b);
       }, []);
+      console.log(ingredients)
+    
 
       // set state with values needed from firebase
       this.setState({
@@ -112,17 +117,17 @@ class EventPage extends Component {
     event.preventDefault();
 
     // get the name of the ingredient to be added
-    const name = event.target.value;
-
+    const ingredientObject = {item: event.target.value, recipeNumber: event.target.id};
+    console.log(ingredientObject)
     // index so that the ingredient can be removed from the master list
     const index = parseInt(event.target.name, 10);
 
     // adds the ingredient to the "cart"
     const copyOfIngredients = [...this.state.currentIngredients];
-    copyOfIngredients.push(name);
-
+    copyOfIngredients.push(ingredientObject);
+    console.log(copyOfIngredients)
     // removes the ingredient from master list (this is not functional yet as it gets re-rendered from firebase in componentDidMount)
-    const availableIngredients = this.state.remainingIngredients;
+    const availableIngredients = [...this.state.remainingIngredients];
     availableIngredients.splice(index, 1);
 
     this.setState({
@@ -139,13 +144,7 @@ class EventPage extends Component {
 
     dbRef.update({
         ingredients: this.state.currentIngredients
-    },() => {
-        // clears the selected ingredients for the next user
-        this.setState({
-          currentIngredients: []
-        });
-      }
-    );
+    });
   };
 
 //   to remove item from cart
@@ -248,13 +247,16 @@ class EventPage extends Component {
               {this.state.recipes
                 ? this.state.remainingIngredients.map((ingredient, index) => {
                     return (
+                        // console.log(ingredient.item)
                       <li key={index}>
                         <button
                           name={index}
                           onClick={this.selectIngredient}
-                          value={ingredient}
+                        //   should the value be the whole object?
+                          value={ingredient.item}
+                          id={ingredient.recipeNumber}
                         >
-                          {ingredient}
+                          {ingredient.item}
                         </button>
                       </li>
                     );
@@ -287,7 +289,7 @@ class EventPage extends Component {
                         (ingredient, ingredientIndex) => {
                           return (
                             <div>
-                              <li key={ingredientIndex}>{ingredient}</li>
+                              <li key={ingredientIndex}>{ingredient.item}</li>
                               <button
                                 value={ingredientIndex}
                                 onClick={this.removeFromCart}
@@ -323,7 +325,7 @@ class EventPage extends Component {
                     <ul>
                       {guest.ingredients
                         ? guest.ingredients.map((ingredient, index) => {
-                            return <li key={index}> {ingredient}</li>;
+                            return <li key={index}> {ingredient.item}</li>;
                           })
                         : console.log("fail")}
                     </ul>
