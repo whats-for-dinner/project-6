@@ -297,7 +297,7 @@ class EventPage extends Component {
 
 
         {/* Maps chosen recipe details to page as a link to the full recipe */}
-        <section>
+        <section className="storedRecipes">
           <div className="backgroundContainer">
             <div className="recipesContainer">
               <div className="yourRecipes">
@@ -321,7 +321,7 @@ class EventPage extends Component {
                         onClick={(event) => {this.deleteMeal(event, recipe.recipe.strMeal)}}
                         id={recipe.recipe.idMeal}
                       >
-                        delete
+                        remove
                       </button>
                     </div>
                   )
