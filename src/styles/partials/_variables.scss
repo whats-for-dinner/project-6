@@ -36,6 +36,12 @@ $body: 'Barlow', sans-serif;
     }
 }
 
+@mixin mq-610 {
+    @media (max-width: 610px) {
+        @content;
+    }
+}
+
 @mixin mq-500 {
   @media (max-width: 500px) {
     @content;
