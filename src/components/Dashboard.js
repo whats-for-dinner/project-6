@@ -237,26 +237,30 @@ class EventPage extends Component {
     
     
     // and remove ingredients saved to guests as well.
-    // needs error handling.
-    const copyOfGuests = [...this.state.guestList];
+    // needs error handling. If theres no guest list and if all guests dont have assigned ingredients. 
 
-    const newGuestList = copyOfGuests.map((guest) => {
-        const filteredIngredients = guest.ingredients.filter(ingredient => {
-            return ingredient.recipeNumber != recipeId;
-        })
-        return ({
-          name: guest.name,
-          ingredients: filteredIngredients
-        })
-    });   
-    
-    const dbRefGuest = firebase.database().ref(`events/${this.props.match.params.partyName}/guests`);
-    
-    
-    dbRefGuest.update({
-        guestList: newGuestList
-    })
+    if (this.state.guestList === []){
+      const copyOfGuests = [...this.state.guestList];
 
+      const newGuestList = copyOfGuests.map((guest) => {
+        if (guest.ingredients == true){
+          const filteredIngredients = guest.ingredients.filter(ingredient => {
+              return ingredient.recipeNumber != recipeId;
+          })
+          return ({
+            name: guest.name,
+            ingredients: filteredIngredients
+          })
+        }  
+      });   
+      
+      const dbRefGuest = firebase.database().ref(`events/${this.props.match.params.partyName}/guests`);
+      
+      
+      dbRefGuest.update({
+          guestList: newGuestList
+      })
+    }
 
   };
 
