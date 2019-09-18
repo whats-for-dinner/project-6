@@ -10,6 +10,7 @@ class FullRecipe extends React.Component {
       recipeObject: '',
       finalIngredientsArray: [],
       ingredientList: [],
+      firebaseIngredients: [],
     };
   }
 
@@ -69,13 +70,30 @@ class FullRecipe extends React.Component {
       }
     });
 
+    const dbRefIngredients = firebase
+      .database()
+      .ref(`events/${this.props.match.params.partyName}/unassignedIngredients`);
 
-  }
+    dbRefIngredients.on("value", (data) => {
+      const list = data.val();
+
+      this.setState({
+        firebaseIngredients: list,
+      })
+
+    })
+
+}
 
   
 
   sendToFirebase = (event) => {
     event.preventDefault();
+
+    const newRecipeObject = {
+      recipe: this.state.recipeObject,
+      ingredients: this.state.finalIngredientsArray
+    };
     
     const dbRef = firebase
       .database()
@@ -84,52 +102,47 @@ class FullRecipe extends React.Component {
     dbRef.update({
       [this.state.recipeObject.strMeal]: newRecipeObject
     });
-    
 
-    const dbRefIngredients = firebase
-      .database()
-      .ref(`events/${this.props.match.params.partyName}/unassignedIngredients`);
+    const newItems = this.state.finalIngredientsArray
+    const newRecipeId = this.state.recipeObject.idMeal
 
-    dbRefIngredients.on("value", (data) => {
-      const list = data.val();
-      console.log(list)
-      const newItems = this.state.finalIngredientsArray
-      const newRecipeId = this.state.recipeObject.idMeal
-  
-      const itemsToAdd = newItems.map((ingredient) => {
-        return {item: ingredient, recipeNumber: newRecipeId}
-      })
-  
-      console.log(itemsToAdd)
-  
-      const arrayToMerge = [list, itemsToAdd]
-  
-      console.log(arrayToMerge)
-
-      const ingredients = arrayToMerge.reduce(function(a, b) {
-        return a.concat(b);
-      }, []);
-      console.log(ingredients)
-
-      this.setState({
-        ingredientList: ingredients,
-      })
+    const itemsToAdd = newItems.map((ingredient) => {
+      return {item: ingredient, recipeNumber: newRecipeId}
     })
 
-    const newRecipeObject = {
-      recipe: this.state.recipeObject,
-      ingredients: this.state.finalIngredientsArray
-    };
+    console.log(itemsToAdd)
 
-    
+    const list = this.state.firebaseIngredients;
+    const arrayToMerge = [list, itemsToAdd]
 
+    console.log(arrayToMerge)
+
+    const ingredients = arrayToMerge.reduce(function(a, b) {
+      return a.concat(b);
+    }, []);
+    ingredients.shift();
+    console.log(ingredients)
+
+    // this.setState({
+    //   ingredientList: ingredients,
+    //   })
     const dbRefIn = firebase
-      .database()
-      .ref(`events/${this.props.match.params.partyName}`);
+          .database()
+          .ref(`events/${this.props.match.params.partyName}`);
+    
+        dbRefIn.update({
+          unassignedIngredients: ingredients,
+        });  
 
-    dbRefIn.update({
-      unassignedIngredients: ["test array", "this is a test"]
-    });  
+    // const dbRefIn = firebase
+    //       .database()
+    //       .ref(`events/${this.props.match.params.partyName}`);
+    
+    //     dbRefIn.update({
+    //       unassignedIngredients: ["fuck you infinite loop"]
+    //     });  
+
+
 
 
   }
