@@ -390,7 +390,8 @@ class EventPage extends Component {
                                 onClick={this.removeFromCart}
                                 className="removeButtonStyle"
                               >
-                                <i class="far fa-trash-alt"></i>
+                                {/* &#215; */}
+                                X
                               </button>
                               </li>
                             </div>
@@ -406,7 +407,7 @@ class EventPage extends Component {
               </button>
               {!cartIsEnabled ?
                 <p className="instructionsMessage">
-                  Please Select a Guest To Add Ingredients To Their Cart
+                  Select a guest and pick the ingredients they should bring. 
                 </p> : <p className="instructionsMessage">Click on items from your ingredients list to add them to this guests's cart</p>}
               <i class="fas fa-shopping-cart"></i>
             </form>

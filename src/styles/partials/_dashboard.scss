@@ -1,5 +1,7 @@
 .dashBoard {
 
+    // HEADER STYLES===================
+
     header {
         background-color: $red;
         padding-bottom:50px;
@@ -7,17 +9,12 @@
         position: relative;
     }
     .mainHeader {
-        // general layout/positioning
         height: 59px;
         padding: 5px;
         position: absolute;
         top: 0;
         width: 100%;
-        // display: flex;
-        // justify-content: space-between;
-        // align-items: center;
 
-        // styles and colors
         background-color: $black;
         color: white;
         h1 {
@@ -36,11 +33,14 @@
             margin-right: 30px;
             position: absolute;
             right: 0;
-            top: 5%;
+            top: 10%;
+            @media(max-width:530px){
+                top: 60px;
+                color: $black;
+            }
         }
     }
     h2 {
-        // border: 3px solid $black;
         box-shadow: 3px 3px 1px rgba(0,0,0,0.2);
         max-width: 900px;
         width: 80%;
@@ -50,7 +50,17 @@
         padding: 30px;
         background-color: white;
         font-family: $heading;
+
+        @media(max-width: 520px){
+            font-size: 5rem;
+        }
+
+        @media(max-width: 380px){
+            font-size: 4.5rem;
+        }
     }
+
+    //ADD RECIPE/ADD GUEST STYLES==========
 
     .stepOne {
         margin: 100px 0;
@@ -119,6 +129,9 @@
             }
         }
     }
+
+    //YOUR RECIPES SECTION====================
+
     .backgroundContainer {
         padding: 50px 0;
         color: $black;
@@ -201,6 +214,8 @@
         background-color: rgb(233, 233, 233);
     }
 
+    //DIVIDE UP INGREDIENTS SECTION=====================
+
     .stepTwo {
         width: 80%;
         margin: 100px auto;
@@ -216,7 +231,7 @@
             margin-right: 10px;
             border: 1px solid rgba(0,0,0,0.2);
             box-shadow: 3px 3px 3px rgba(0,0,0,0.2);
-            padding: 0px 10px;
+            padding: 10px 10px 20px 10px;
             @media (max-width: 720px) {
                 width: 100%;
                 margin-bottom: 30px;
@@ -256,6 +271,7 @@
                 width: 100%;
                 margin-left: 0;
                 padding-bottom: 30px;
+                // min-height: 700px;
             }
 
             select {
@@ -276,8 +292,17 @@
                 color: rgba(27,0,29,0.1);
                 position: absolute;
                 bottom: 30px;
-                right: 30%;
+                right: 0;
+                left: 0;
+                // left: 50%;
                 margin: 0;
+                // @media (max-width: 1050px) {
+                //     right: 0;
+                //     left: 0;
+                // }
+                @media (max-width: 720px) {
+                    display: none;
+                }
             }
             .instructionsMessage {
                 width: 60%;
@@ -318,7 +343,7 @@
         margin-top: 20px;
         li {
             font-size:1.8rem;
-            padding: 5px; 
+            padding: 2.7px 2px 2.7px 5px; 
             margin: 4px;
             width: auto;
             height: unset;
@@ -346,11 +371,12 @@
         }
         .removeButtonStyle {
             margin: 0;
-            font-size: 1.5rem;
+            transform: scaleX(-1.2);
+            font-size: 1.6rem;
             margin-left: 5px;
             opacity: 0;
             color: white;
-            background: $red;
+            background: transparent;
             cursor: pointer;
         }
     }
@@ -383,6 +409,9 @@
             }
         }
     }
+
+//WHAT'S IN YOUR BASKET SECTION=============================
+
     .whatsInYourBasket {
         text-transform: uppercase;
         font-size: 3rem;

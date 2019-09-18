@@ -55,8 +55,10 @@ class RecipeGrid extends Component {
               <Link to='/' className='link'>
                 Home
               </Link>
-              <Link to='/event/:' className='link'>
-                Event Page
+              <Link 
+              to={`/dashboard/${this.props.match.params.partyName}`}
+              className='link'>
+              Event Dashboard
               </Link>
             </nav>
             <h2>Find a Recipe</h2>
@@ -93,7 +95,7 @@ class RecipeGrid extends Component {
                     <div className="recipeHeaderContainer">
                       <h2>{recipe.strMeal}</h2>
                     </div>
-                    <img src={recipe.strMealThumb} />
+                    <img src={recipe.strMealThumb} alt={`An image of ${recipe.strMeal}.` }/>
                   </Link>
                 </li>
               );
