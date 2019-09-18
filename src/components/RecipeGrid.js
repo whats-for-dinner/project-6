@@ -47,18 +47,23 @@ class RecipeGrid extends Component {
 
   render() {
     return (
-      <div className=''>
+      <div className="findARecipe">
         <header>
-          <h1>Find a recipe</h1>
+          <div className="mainHeader">
+            <h1>What's For Dinner?</h1>
+            <nav>
+              <Link to='/' className='link'>
+                Home
+              </Link>
+              <Link 
+              to={`/dashboard/${this.props.match.params.partyName}`}
+              className='link'>
+              Event Dashboard
+              </Link>
+            </nav>
+            <h2>Find a Recipe</h2>
+          </div>
         </header>
-        <div className='navContainer'>
-          <Link to='/' className='link'>
-            Home
-          </Link>
-          <Link to='/event/:' className='link'>
-            Event Page
-          </Link>
-        </div>
         <form action=''>
           <div className='box'>
             <select onChange={this.updateUserCategory} name='' id=''>
@@ -87,8 +92,10 @@ class RecipeGrid extends Component {
                 <li id={recipe.idMeal}>
                   <Link
                     to={`/fullrecipe/${recipe.idMeal}/${this.props.match.params.partyName}`}>
-                    <h2>{recipe.strMeal}</h2>
-                    <img src={recipe.strMealThumb} />
+                    <div className="recipeHeaderContainer">
+                      <h2>{recipe.strMeal}</h2>
+                    </div>
+                    <img src={recipe.strMealThumb} alt={`An image of ${recipe.strMeal}.` }/>
                   </Link>
                 </li>
               );

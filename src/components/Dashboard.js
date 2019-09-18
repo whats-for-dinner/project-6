@@ -285,7 +285,7 @@ class EventPage extends Component {
                 <input
                   onChange={this.getNewGuest}
                   name="newGuest"
-                  placeholder="Enter the name of your guest"
+                  placeholder="Enter guest name"
                   value={this.state.newGuest}
                   type="text"
                   id="addGuest"
@@ -307,7 +307,7 @@ class EventPage extends Component {
 
 
         {/* Maps chosen recipe details to page as a link to the full recipe */}
-        <section>
+        <section className="storedRecipes">
           <div className="backgroundContainer">
             <div className="recipesContainer">
               <div className="yourRecipes">
@@ -331,7 +331,7 @@ class EventPage extends Component {
                         onClick={(event) => {this.deleteMeal(event, recipe.recipe.strMeal)}}
                         id={recipe.recipe.idMeal}
                       >
-                        delete
+                        remove
                       </button>
                     </div>
                   )
@@ -373,7 +373,7 @@ class EventPage extends Component {
               <label class="visuallyHidden">Please Select a Guest To Add Ingredients To Their Cart</label>
               <select onChange={this.currentGuest} name="" id="">
                 {/* map users and save the value of the index number */}
-                <option value="">Please Select a Guest</option>
+                <option value="">Guest Name</option>
                 {this.state.guestList
                   ? this.state.guestList.map((guest, guestIndex) => {
                       return (
@@ -400,7 +400,8 @@ class EventPage extends Component {
                                 onClick={this.removeFromCart}
                                 className="removeButtonStyle"
                               >
-                                <i class="far fa-trash-alt"></i>
+                                {/* &#215; */}
+                                X
                               </button>
                               </li>
                             </div>
@@ -416,7 +417,7 @@ class EventPage extends Component {
               </button>
               {!cartIsEnabled ?
                 <p className="instructionsMessage">
-                  Please Select a Guest To Add Ingredients To Their Cart
+                  Select a guest and pick the ingredients they should bring. 
                 </p> : <p className="instructionsMessage">Click on items from your ingredients list to add them to this guests's cart</p>}
               <i class="fas fa-shopping-cart"></i>
             </form>

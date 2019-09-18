@@ -172,7 +172,7 @@ class FullRecipe extends React.Component {
         </header>
         <div className='titleAndPicture'>
           <div className='imageContainer'>
-            <img src={this.state.recipeObject.strMealThumb} alt='' />
+            <img src={this.state.recipeObject.strMealThumb} alt={`An image of ${this.state.recipeObject.strMeal}.`} />
           </div>
           <div className="recipeTitle">
             <h2>          {this.state.recipeObject.strMeal}</h2>
