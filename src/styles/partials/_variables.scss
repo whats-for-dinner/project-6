@@ -11,6 +11,19 @@ $body: 'Barlow', sans-serif;
 
 
 // Mixins
+
+@mixin mq-1230 {
+  @media (max-width: 1230px) {
+    @content;
+  }
+}
+
+@mixin mq-1050 {
+  @media (max-width: 1050px) {
+    @content;
+  }
+}
+
 @mixin mq-980 {
     @media (max-width: 980px) {
         @content;
@@ -19,6 +32,12 @@ $body: 'Barlow', sans-serif;
 
 @mixin mq-710 {
     @media (max-width: 710px) {
+        @content;
+    }
+}
+
+@mixin mq-610 {
+    @media (max-width: 610px) {
         @content;
     }
 }
