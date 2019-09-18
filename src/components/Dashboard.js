@@ -35,14 +35,16 @@ class EventPage extends Component {
       // remove the dummy data so the map doesn't fail
       fullRecipes.pop();
         let ingredients = [];
+        console.log("this",fullRecipes)
         if (firebaseArray[3][0] === "dummy") {
 
             // map over saved recipes to get the total ingredient list from saved recipes
             // the map produces an array of arrays.
             const remainingIngredients = fullRecipes.map((recipe, index) => {
+                const recipeId = recipe.recipe.idMeal
                 return recipe.ingredients.map((ingredient) => {
                 return (
-                    {item: ingredient, recipeNumber: index}
+                    {item: ingredient, recipeNumber: recipeId}
                 );
                 });
             });
@@ -67,7 +69,11 @@ class EventPage extends Component {
   }
 
   componentWillUnmount() {
+    const dbRef = firebase
+      .database()
+      .ref(`events/${this.props.match.params.partyName}`);
 
+    dbRef.off();  
   }
 
   // event handler for name input to add guest value to state for saving
@@ -313,7 +319,7 @@ class EventPage extends Component {
                       </Link>
                       <button
                         onClick={(event) => {this.deleteMeal(event, recipe.recipe.strMeal)}}
-                        id={recipeIndex}
+                        id={recipe.recipe.idMeal}
                       >
                         delete
                       </button>
