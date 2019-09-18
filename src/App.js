@@ -66,7 +66,6 @@ class App extends Component {
             guests: {dummy: 0},
             recipes: { dummy: 0 },
             unassignedIngredients: ["dummy"]
-          
           });
         }
       );
@@ -81,7 +80,7 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
+      <Router basename={process.env.PUBLIC_URL}>
         <div className="App">
           <Route exact path="/" render={() =>{return <LandingPage event={this.state.events} getEventName={this.getEventName} createEvent={this.createEvent} errorMessage={this.state.errorMessage} errorMessage2={this.state.errorMessage2} createEventName={this.state.createEvent} 
           />}}/>
