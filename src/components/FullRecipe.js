@@ -70,6 +70,7 @@ class FullRecipe extends React.Component {
       }
     });
 
+    // Grabs the current ingredients for that event in firebase so unassigned ingredient array can be updated on click of select recipe. 
     const dbRefIngredients = firebase
       .database()
       .ref(`events/${this.props.match.params.partyName}/unassignedIngredients`);
@@ -83,13 +84,22 @@ class FullRecipe extends React.Component {
 
     })
 
-}
+  }
+
+// turns of firebase listener when not on page.
+    componentWillMount(){
+    const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}/unassignedIngredients`);
+
+    dbRef.off(); 
+  }
+
 
   
 
   sendToFirebase = (event) => {
     event.preventDefault();
 
+    // Sends the whole recipe and ingredient list to the recipe node on firebase.
     const newRecipeObject = {
       recipe: this.state.recipeObject,
       ingredients: this.state.finalIngredientsArray
@@ -103,48 +113,37 @@ class FullRecipe extends React.Component {
       [this.state.recipeObject.strMeal]: newRecipeObject
     });
 
-    const newItems = this.state.finalIngredientsArray
-    const newRecipeId = this.state.recipeObject.idMeal
 
+    // get the ingredients for current recipe
+    const newItems = this.state.finalIngredientsArray
+    // get the id to add to the recipe object
+    const newRecipeId = this.state.recipeObject.idMeal
+    // turns them into an object with both keys to keep track of what recipe they belong to
     const itemsToAdd = newItems.map((ingredient) => {
       return {item: ingredient, recipeNumber: newRecipeId}
     })
 
-    console.log(itemsToAdd)
-
+    // gets the list of things already in firebase
     const list = this.state.firebaseIngredients;
+    
+    // if the event is new the first item is "dummy" so we need to get rid of it.
+    if (list[0] === "dummy") {
+      list.splice(list.indexOf("dummy"), 1);
+    }
+    
+    // add the new ingredients array and the existing ingredients array
     const arrayToMerge = [list, itemsToAdd]
-
-    console.log(arrayToMerge)
-
-    const ingredients = arrayToMerge.reduce(function(a, b) {
+    // merges them into one array
+    let ingredients = arrayToMerge.reduce(function(a, b) {
       return a.concat(b);
     }, []);
-    ingredients.shift();
-    console.log(ingredients)
 
-    // this.setState({
-    //   ingredientList: ingredients,
-    //   })
-    const dbRefIn = firebase
-          .database()
-          .ref(`events/${this.props.match.params.partyName}`);
+    // sends up to firebase to be rendered on dashboard
+    const dbRefIn = firebase.database().ref(`events/${this.props.match.params.partyName}`);
     
-        dbRefIn.update({
-          unassignedIngredients: ingredients,
-        });  
-
-    // const dbRefIn = firebase
-    //       .database()
-    //       .ref(`events/${this.props.match.params.partyName}`);
-    
-    //     dbRefIn.update({
-    //       unassignedIngredients: ["fuck you infinite loop"]
-    //     });  
-
-
-
-
+    dbRefIn.update({
+      unassignedIngredients: ingredients,
+    });  
   }
 
   render() {

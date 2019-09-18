@@ -22,9 +22,7 @@ class EventPage extends Component {
 
   componentDidMount() {
     // using the name of the party from the url will match the item in firebase
-    const dbRef = firebase
-      .database()
-      .ref(`events/${this.props.match.params.partyName}`);
+    const dbRef = firebase.database().ref(`events/${this.props.match.params.partyName}`);
 
     dbRef.on("value", data => {
       const event = data.val();
@@ -34,29 +32,30 @@ class EventPage extends Component {
       const fullRecipes = Object.values(firebaseArray[2]);
       // remove the dummy data so the map doesn't fail
       fullRecipes.pop();
-        let ingredients = [];
-        console.log("this",fullRecipes)
-        if (firebaseArray[3][0] === "dummy") {
+      let ingredients = [];
+      
+      // checks if the first item is dummy data
+      if (firebaseArray[3][0] === "dummy") {
 
-            // map over saved recipes to get the total ingredient list from saved recipes
-            // the map produces an array of arrays.
-            const remainingIngredients = fullRecipes.map((recipe, index) => {
-                const recipeId = recipe.recipe.idMeal
-                return recipe.ingredients.map((ingredient) => {
-                return (
-                    {item: ingredient, recipeNumber: recipeId}
-                );
-                });
+        // map over saved recipes to get the total ingredient list from saved recipes
+        // the map produces an array of arrays.
+        const remainingIngredients = fullRecipes.map((recipe, index) => {
+            const recipeId = recipe.recipe.idMeal
+            return recipe.ingredients.map((ingredient) => {
+            return (
+                {item: ingredient, recipeNumber: recipeId}
+            );
             });
-            console.log(remainingIngredients)
-            // to combine those arrays into one array
-            ingredients = remainingIngredients.reduce(function(a, b) {
-                return a.concat(b);
-            }, []);
+        });
+
+        // to combine those arrays into one array
+        ingredients = remainingIngredients.reduce(function(a, b) {
+            return a.concat(b);
+        }, []);
             
-        } else {
-            ingredients = firebaseArray[3];
-        }
+      } else {
+          ingredients = firebaseArray[3];
+      }
 
       // set state with values needed from firebase
       this.setState({
@@ -67,7 +66,7 @@ class EventPage extends Component {
       });
     });
   }
-
+  // turns off firebase listener when not on page
   componentWillUnmount() {
     const dbRef = firebase
       .database()
@@ -172,7 +171,7 @@ class EventPage extends Component {
   };
 
 //   to remove item from cart
-// if we get delete from master list working- this needs to then add it back 
+
   removeFromCart = event => {
     event.preventDefault();
     // value comes out as a string of the index
@@ -189,6 +188,7 @@ class EventPage extends Component {
       recipeNumber: event.target.id
     };
     
+    // add the ingredient back into the master list
     const copyOfIngredients = [...this.state.remainingIngredients]
 
     copyOfIngredients.push(ingredientObject)
@@ -204,18 +204,22 @@ class EventPage extends Component {
   deleteMeal = (event, mealId) => {
     event.preventDefault();
 
+    // set state so that whats in cart doesn't get left behind.
     this.setState({
       currentIngredients: [],
     })
 
+    // gets the recipe id so we know which recipe to delete ingredients from
     const recipeId = event.target.id
 
+    // removes the actual recipe
     const dbRefRecipe = firebase
       .database()
       .ref(`events/${this.props.match.params.partyName}/recipes`);
 
     dbRefRecipe.child(mealId).remove();
 
+    // also needs to remove the ingredients from the master list of unassigned ingredients.
     const copyRemainingIngredients = [...this.state.remainingIngredients];
 
     const newRemainingIngredients = copyRemainingIngredients.filter((ingredientObject) => {
@@ -230,8 +234,10 @@ class EventPage extends Component {
           unassignedIngredients: newRemainingIngredients
       })
     
+    
+    // and remove ingredients saved to guests as well.
+    // needs error handling.
     const copyOfGuests = [...this.state.guestList];
-
 
     const newGuestList = copyOfGuests.map((guest) => {
         const filteredIngredients = guest.ingredients.filter(ingredient => {
@@ -245,7 +251,7 @@ class EventPage extends Component {
     
     const dbRefGuest = firebase.database().ref(`events/${this.props.match.params.partyName}/guests`);
     
-    console.log(newGuestList)
+    
     dbRefGuest.update({
         guestList: newGuestList
     })
