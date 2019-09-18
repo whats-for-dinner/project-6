@@ -36,25 +36,21 @@ class EventPage extends Component {
       
       // checks if the first item is dummy data
       if (firebaseArray[3][0] === "dummy") {
-
         // map over saved recipes to get the total ingredient list from saved recipes
         // the map produces an array of arrays.
         const remainingIngredients = fullRecipes.map((recipe, index) => {
-            const recipeId = recipe.recipe.idMeal
-            return recipe.ingredients.map((ingredient) => {
-            return (
-                {item: ingredient, recipeNumber: recipeId}
-            );
-            });
+          const recipeId = recipe.recipe.idMeal;
+          return recipe.ingredients.map(ingredient => {
+            return { item: ingredient, recipeNumber: recipeId };
+          });
         });
 
         // to combine those arrays into one array
         ingredients = remainingIngredients.reduce(function(a, b) {
-            return a.concat(b);
+          return a.concat(b);
         }, []);
-            
       } else {
-          ingredients = firebaseArray[3];
+        ingredients = firebaseArray[3];
       }
 
       // set state with values needed from firebase
@@ -222,16 +218,21 @@ class EventPage extends Component {
     // also needs to remove the ingredients from the master list of unassigned ingredients.
     const copyRemainingIngredients = [...this.state.remainingIngredients];
 
-    const newRemainingIngredients = copyRemainingIngredients.filter((ingredientObject) => {
+    let newRemainingIngredients = copyRemainingIngredients.filter((ingredientObject) => {
         return ingredientObject.recipeNumber != recipeId
     })
+
+    if (newRemainingIngredients < 1){
+      newRemainingIngredients = ["dummy"]
+    }
 
     const dbRefIngredients = firebase
       .database()
       .ref(`events/${this.props.match.params.partyName}`);
 
       dbRefIngredients.update({
-          unassignedIngredients: newRemainingIngredients
+          unassignedIngredients: newRemainingIngredients,
+          
       })
     
     
