@@ -204,6 +204,10 @@ class EventPage extends Component {
   deleteMeal = (event, mealId) => {
     event.preventDefault();
 
+    this.setState({
+      currentIngredients: [],
+    })
+
     const recipeId = event.target.id
 
     const dbRefRecipe = firebase
